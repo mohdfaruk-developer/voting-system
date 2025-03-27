@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('aadhar_number')->unique();
             $table->string('address');
             $table->string('city');
-            $table->string('district')->nullable();
             $table->string('state')->nullable();
             $table->string('country');
             $table->string('pin_code')->nullable();
