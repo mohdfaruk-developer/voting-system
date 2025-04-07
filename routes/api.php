@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\LocationController;
+use App\Http\Controllers\Api\LocationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('cache.headers:public;max_age=86400;etag')->group(function () {
