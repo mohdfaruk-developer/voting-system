@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreElectionRequest;
+use App\Http\Requests\UpdateElectionRequest;
 use App\Models\Election;
 
 class ElectionController extends Controller
@@ -50,7 +51,7 @@ class ElectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreElectionRequest $request, Election $election)
+    public function update(UpdateElectionRequest $request, Election $election)
     {
         //
     }

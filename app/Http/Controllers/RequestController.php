@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRequestRequest;
-use App\Models\Request;
+use App\Http\Requests\StoreCandidateRequest;
+use App\Http\Requests\StoreVoterRequest;
+use App\Http\Requests\UpdateRequestRequest;
+use App\Models\RequestModel;
 
 class RequestController extends Controller
 {
@@ -26,7 +28,7 @@ class RequestController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequestRequest $request)
+    public function store(StoreVoterRequest $request)
     {
         //
     }
@@ -34,15 +36,7 @@ class RequestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request)
+    public function show(RequestModel $request)
     {
         //
     }
@@ -50,15 +44,15 @@ class RequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRequestRequest $request, Request $requestModel)
+    public function update(UpdateRequestRequest $request, RequestModel $requestModel)
     {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Store a newly created resource in storage.
      */
-    public function destroy(Request $request)
+    public function storeCandidateRequest(StoreCandidateRequest $request)
     {
         //
     }

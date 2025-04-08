@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Request extends Model
+class RequestModel extends Model
 {
+    protected $table = 'requests';
+
     use HasFactory;
 
     /**
@@ -29,6 +31,17 @@ class Request extends Model
         self::STATUS_REJECTED,
         self::STATUS_CANCELLED,
     ];
+
+    /**
+     * Request types constants
+     */
+    public const TYPE_NEW_VOTER = 'new_voter';
+
+    public const TYPE_EXIST_VOTER = 'exist_voter';
+
+    public const TYPE_NEW_CANDIDATE = 'new_candidate';
+
+    public const TYPE_EXIST_CANDIDATE = 'exist_candidate';
 
     /**
      * The attributes that are mass assignable.

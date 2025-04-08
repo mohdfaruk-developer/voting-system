@@ -10,6 +10,27 @@ class Election extends Model
     use HasFactory;
 
     /**
+     * Election level constants
+     */
+    public const LEVEL_COUNTRY = 'country';
+
+    public const LEVEL_STATE = 'state';
+
+    public const LEVEL_CITY = 'city';
+
+    public const LEVEL_LOCAL = 'local';
+
+    /**
+     * All available election levels
+     */
+    public const LEVELS = [
+        self::LEVEL_COUNTRY,
+        self::LEVEL_STATE,
+        self::LEVEL_CITY,
+        self::LEVEL_LOCAL,
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
