@@ -60,7 +60,7 @@ class LocationCreateOrUpdateCommand extends Command
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error('Command failed: '.$e->getMessage());
+            $this->error('Command failed: ' . $e->getMessage());
         }
     }
 
@@ -76,11 +76,11 @@ class LocationCreateOrUpdateCommand extends Command
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch countries data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch countries data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
 
             return [];
         } catch (\Exception $e) {
-            $this->error('Error fetching countries: '.$e->getMessage());
+            $this->error('Error fetching countries: ' . $e->getMessage());
 
             return [];
         }
@@ -119,11 +119,11 @@ class LocationCreateOrUpdateCommand extends Command
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch states data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch states data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
 
             return [];
         } catch (\Exception $e) {
-            $this->error('Error fetching states: '.$e->getMessage());
+            $this->error('Error fetching states: ' . $e->getMessage());
 
             return [];
         }
@@ -186,11 +186,11 @@ class LocationCreateOrUpdateCommand extends Command
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch cities data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch cities data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
 
             return [];
         } catch (\Exception $e) {
-            $this->error('Error fetching cities: '.$e->getMessage());
+            $this->error('Error fetching cities: ' . $e->getMessage());
 
             return [];
         }
