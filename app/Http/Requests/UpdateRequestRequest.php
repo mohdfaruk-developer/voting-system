@@ -16,7 +16,15 @@ class UpdateRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => [
+                'required',
+                'string',
+                'in:' . implode(',', \App\Models\RequestModel::STATUSES),
+            ],
+            'comment' => [
+                'required_if:status,' . \App\Models\RequestModel::STATUS_REJECTED,
+                'string',
+            ],
         ];
     }
 }

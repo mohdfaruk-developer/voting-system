@@ -22,8 +22,6 @@ class RequestModel extends Model
 
     public const STATUS_REJECTED = 'rejected';
 
-    public const STATUS_CANCELLED = 'cancelled';
-
     /**
      * All available status values
      */
@@ -31,7 +29,6 @@ class RequestModel extends Model
         self::STATUS_PENDING,
         self::STATUS_APPROVED,
         self::STATUS_REJECTED,
-        self::STATUS_CANCELLED,
     ];
 
     /**
@@ -73,7 +70,7 @@ class RequestModel extends Model
      */
     public function verifiedBy()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     /**
