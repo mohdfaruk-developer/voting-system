@@ -10,8 +10,12 @@ import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 import SecondaryButton from "@/Components/SecondaryButton";
 
-export default function Index({ auth, requests, queryParams = null, success }) {
-  console.log(requests.data);
+export default function Index({
+  requests,
+  queryParams = null,
+  success,
+  error,
+}) {
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -49,7 +53,6 @@ export default function Index({ auth, requests, queryParams = null, success }) {
   const rejectRequest = (request) => {
     let comment = window.prompt("Please enter a reason for rejection");
     if (comment === null) {
-      alert("Please enter a reason for rejection");
       return;
     }
     router.put(route("requests.update", request.id), {
@@ -71,7 +74,6 @@ export default function Index({ auth, requests, queryParams = null, success }) {
 
   return (
     <AuthenticatedLayout
-      user={auth.user}
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -93,6 +95,11 @@ export default function Index({ auth, requests, queryParams = null, success }) {
           {success && (
             <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
               {success}
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
+              {error}
             </div>
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

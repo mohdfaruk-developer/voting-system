@@ -43,6 +43,8 @@ class RequestController extends Controller
         return Inertia::render('Requests/Index', [
             'requests' => RequestResource::collection($requests),
             'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
+            'error' => session('error'),
         ]);
     }
 
@@ -75,9 +77,15 @@ class RequestController extends Controller
      */
     public function show(RequestModel $request)
     {
+        $user = request()->user();
+        if (! ($user->is_admin || $user->id == $request->user_id)) {
+            // Check if the user is authorized to delete the request
+            abort(403, 'Unauthorized action.');
+        }
+
         // Return the details of the specified request
         return Inertia::render('Requests/Show', [
-            'request' => RequestResource::make($request),
+            'request' => RequestResource::make($request->load(['verifiedBy', 'user'])),
         ]);
     }
 

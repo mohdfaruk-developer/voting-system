@@ -50,16 +50,6 @@ class RequestModelFactory extends Factory
                 RequestModel::TYPE_EXIST_VOTER,
                 RequestModel::TYPE_EXIST_CANDIDATE,
             ]),
-            'data' => [
-                'date_of_birth' => fake()->date(),
-                'aadhar_number' => fake()->unique()->numerify('###########'),
-                'address' => fake()->address(),
-                'city' => fake()->city(),
-                'state' => fake()->state(),
-                'country' => fake()->country(),
-                'pin_code' => fake()->postcode(),
-                'religion' => fake()->word(),
-            ],
             'old_data' => [
                 'date_of_birth' => fake()->date(),
                 'aadhar_number' => fake()->unique()->numerify('###########'),
