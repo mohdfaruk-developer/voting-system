@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class LocationCreateOrUpdateCommand extends Command
 {
@@ -52,7 +52,6 @@ class LocationCreateOrUpdateCommand extends Command
             $states = $this->getStates();
             if (! empty($states)) {
                 $this->createOrUpdateStates($states);
-                $this->createOrUpdateCities();
             } else {
                 $this->warn('No states data available to process');
             }
@@ -93,7 +92,13 @@ class LocationCreateOrUpdateCommand extends Command
     {
         $this->info('Creating or updating country data...');
 
-        $countryData = array_map('array_change_key_case', $countries);
+        $countryData = array_map(function ($country) {
+            return [
+                'name' => Str::lower($country['name']),
+                'iso2' => $country['Iso2'],
+                'iso3' => $country['Iso3'],
+            ];
+        }, $countries);
 
         Country::upsert(
             $countryData,
@@ -149,7 +154,7 @@ class LocationCreateOrUpdateCommand extends Command
 
             $stateData = array_map(function ($state) use ($countries, $countryIsoCode) {
                 return [
-                    'name' => $state['name'],
+                    'name' => Str::lower($state['name']),
                     'code' => $state['state_code'],
                     'country_id' => $countries[$countryIsoCode],
                 ];
@@ -168,82 +173,5 @@ class LocationCreateOrUpdateCommand extends Command
         }
 
         $this->info('Successfully created or updated states');
-    }
-
-    /**
-     * Get the cities data from the API.
-     */
-    private function getCities(string $country, ?string $state = null): array
-    {
-        try {
-            if ($state) {
-                $response = Http::get("{$this->baseApiUrl}/countries/state/cities/q?country={$country}&state={$state}");
-            } else {
-                $response = Http::get("{$this->baseApiUrl}/countries/cities/q?country={$country}");
-            }
-
-            if ($response->successful()) {
-                return $response->json('data');
-            }
-
-            $this->error('Failed to fetch cities data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
-
-            return [];
-        } catch (\Exception $e) {
-            $this->error('Error fetching cities: ' . $e->getMessage());
-
-            return [];
-        }
-    }
-
-    /**
-     * Create or update the cities in the database.
-     */
-    private function createOrUpdateCities(): void
-    {
-        Country::query()->chunk(100, function ($countries) {
-            foreach ($countries as $country) {
-                $country->load('states');
-                $countryName = $country->name;
-                $countryId = $country->id;
-                $this->info("Creating or updating city data for {$countryName} country...");
-                if ($country->states->isNotEmpty()) {
-                    $country->states->each(function ($state) use ($countryName, $countryId) {
-                        $cities = $this->getCities($countryName, $state->name);
-                        $cityData = [];
-                        foreach ($cities as $city) {
-                            $cityData[] = [
-                                'name' => $city,
-                                'state_id' => $state->id,
-                                'country_id' => $countryId,
-                            ];
-                        }
-                        City::insertOrIgnore($cityData);
-
-                        // Remove cities from database that no longer exist in the API response
-                        City::where('state_id', $state->id)
-                            ->whereNotIn('name', $cities)
-                            ->delete();
-                    });
-                } else {
-                    $cities = $this->getCities($countryName);
-                    $cityData = [];
-                    foreach ($cities as $city) {
-                        $cityData[] = [
-                            'name' => $city,
-                            'state_id' => null,
-                            'country_id' => $countryId,
-                        ];
-                    }
-                    City::insertOrIgnore($cityData);
-
-                    // Remove cities from database that no longer exist in the API response
-                    City::where('country_id', $countryId)
-                        ->whereNotIn('name', $cities)
-                        ->delete();
-                }
-                $this->info('Successfully created or updated cities');
-            }
-        });
     }
 }

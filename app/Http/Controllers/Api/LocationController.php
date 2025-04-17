@@ -30,30 +30,14 @@ class LocationController extends Controller
     /**
      * Get states by country
      */
-    public function statesByCountry(string $isoCode): JsonResponse
+    public function statesByCountry(string $countryName): JsonResponse
     {
-        $states = $this->locationService->getStatesByCountry($isoCode);
+        try {
+            $states = $this->locationService->getStatesByCountry($countryName);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Country not found'], 404);
+        }
 
         return response()->json(['data' => $states, 'message' => 'States retrieved successfully']);
-    }
-
-    /**
-     * Get cities by country and state
-     */
-    public function citiesByCountryAndState(string $isoCode, string $stateCode): JsonResponse
-    {
-        $cities = $this->locationService->getCitiesByCountryAndState($isoCode, $stateCode);
-
-        return response()->json(['data' => $cities, 'message' => 'Cities retrieved successfully']);
-    }
-
-    /**
-     * Get cities by country and state
-     */
-    public function citiesByCountry(string $isoCode): JsonResponse
-    {
-        $cities = $this->locationService->getCitiesByCountryOnly($isoCode);
-
-        return response()->json(['data' => $cities, 'message' => 'Cities retrieved successfully']);
     }
 }
