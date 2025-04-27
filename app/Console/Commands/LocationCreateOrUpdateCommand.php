@@ -18,7 +18,7 @@ class LocationCreateOrUpdateCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'moodiy:location-create-update';
+    protected $signature = 'app:location-create-update';
 
     /**
      * The console command description.

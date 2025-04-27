@@ -1,5 +1,3 @@
-import { Link } from "@inertiajs/react";
-
 export default function Data({ data }) {
   return (
     <div>

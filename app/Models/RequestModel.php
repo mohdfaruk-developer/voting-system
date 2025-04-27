@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\RequestObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
+#[ObservedBy([RequestObserver::class])]
 class RequestModel extends Model
 {
     protected $table = 'requests';
@@ -71,6 +76,66 @@ class RequestModel extends Model
     public function verifiedBy()
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    /**
+     * Prepare the data for voter request.
+     */
+    public static function getVoterRequestData(Request $request, ?Voter $model = null): array
+    {
+        if ($model) {
+            $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion'];
+            foreach ($keys as $key) {
+                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
+                    $data['data'][$key] = $request[$key];
+                    $data['old_data'][$key] = $model->{$key};
+                }
+            }
+            $data += [
+                'user_id' => $request->user()->id,
+                'type' => $request['request_type'],
+                'status' => self::STATUS_PENDING,
+                'id' => $model->id,
+            ];
+        } else {
+            $data = [
+                'user_id' => $request->user()->id,
+                'type' => $request['request_type'],
+                'data' => [
+                    'name' => $request['name'],
+                    'date_of_birth' => $request['date_of_birth'],
+                    'aadhar_number' => $request['aadhar_number'],
+                    'address' => $request['address'],
+                    'city' => $request['city'],
+                    'state' => $request['state'],
+                    'country' => $request['country'],
+                    'pin_code' => $request['pin_code'],
+                    'religion' => $request['religion'],
+                ],
+                'status' => self::STATUS_PENDING,
+            ];
+        }
+        if ($request->hasFile('aadhar_image')) {
+            // Store the uploaded file and get the path
+            $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/' . Str::random(), 'public');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Prepare the data for candidate request.
+     */
+    public static function getCandidateRequestData(array $request, Candidate $model): array
+    {
+        $data = [];
+        if ($model) {
+            // code...
+        } else {
+            // code...
+        }
+
+        return $data;
     }
 
     /**

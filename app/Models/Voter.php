@@ -25,6 +25,7 @@ class Voter extends Model
      */
     protected $fillable = [
         'user_id',
+        'name',
         'voter_number',
         'date_of_birth',
         'active',

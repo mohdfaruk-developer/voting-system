@@ -17,6 +17,7 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('voter_number')->unique();
+            $table->string('name');
             $table->timestamp('date_of_birth');
             $table->boolean('active')->default(true);
             $table->string('aadhar_number')->unique();

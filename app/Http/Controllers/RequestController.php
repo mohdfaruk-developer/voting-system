@@ -9,6 +9,7 @@ use App\Http\Requests\StoreVoterRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\RequestResource;
 use App\Models\RequestModel;
+use App\Models\Voter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -63,7 +64,14 @@ class RequestController extends Controller
     public function store(StoreVoterRequest $formRequest)
     {
         // Validate and store the request data
-        $validatedData = $formRequest->validated();
+        $validatedData = RequestModel::getVoterRequestData($formRequest);
+
+        if (Voter::where([
+            'user_id' => $formRequest->user()->id,
+            'active' => true,
+        ])->exists()) {
+            return redirect()->route('requests.index')->with('error', "Can't create voter request because You have already voter card.");
+        }
 
         // Create a new request
         $formRequest = RequestModel::create($validatedData);
