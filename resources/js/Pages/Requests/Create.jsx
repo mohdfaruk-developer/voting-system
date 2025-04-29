@@ -9,16 +9,17 @@ import { useEffect, useState } from "react";
 
 export default function Create({ auth, voter }) {
   const { data, setData, post, errors, reset } = useForm({
+    voter_id: voter ? voter.data.id : "",
     request_type: voter ? "exist_voter" : "new_voter",
-    name: voter ? voter.name : auth.user.name,
-    date_of_birth: voter ? voter.date_of_birth : "",
-    aadhar_number: voter ? voter.aadhar_number : "",
-    address: voter ? voter.address : "",
-    city: voter ? voter.city : "",
-    state: voter ? voter.state : "",
-    country: voter ? voter.country : "",
-    pin_code: voter ? voter.pin_code : "",
-    religion: voter ? voter.religion : "",
+    name: voter ? voter.data.name : auth.user.name,
+    date_of_birth: voter ? voter.data.date_of_birth : "",
+    aadhar_number: voter ? voter.data.aadhar_number : "",
+    address: voter ? voter.data.address : "",
+    city: voter ? voter.data.city : "",
+    state: voter ? voter.data.state : "",
+    country: voter ? voter.data.country : "",
+    pin_code: voter ? voter.data.pin_code : "",
+    religion: voter ? voter.data.religion : "",
     aadhar_image: "",
   });
 
@@ -88,10 +89,10 @@ export default function Create({ auth, voter }) {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
                 <div className="mt-4">
-                  <InputLabel htmlFor="voter_name" value="Voter Name" />
+                  <InputLabel htmlFor="name" value="Voter Name" />
 
                   <TextInput
-                    id="voter_name"
+                    id="name"
                     type="text"
                     name="name"
                     value={data.name}

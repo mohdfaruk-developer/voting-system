@@ -1,13 +1,24 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import {
   REQUEST_STATUS_CLASS_MAP,
   REQUEST_STATUS_TEXT_MAP,
   REQUEST_TYPE_TEXT_MAP,
 } from "@/constants.jsx";
 import Data from "@/Components/Data";
+import { useState } from "react";
+import Modal from "@/Components/Modal";
+import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Show({ request }) {
+  const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+  const confirmUserDeletion = () => {
+    setConfirmingUserDeletion(true);
+  };
+  const closeModal = () => {
+    setConfirmingUserDeletion(false);
+  };
+
   const approveRequest = (request) => {
     if (!window.confirm("Are you sure you want to approve the request?")) {
       return;
@@ -48,21 +59,25 @@ export default function Show({ request }) {
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
+            <div className="p-10 text-gray-900 dark:text-gray-100">
               <div className="grid gap-1 grid-cols-2 mt-2">
                 <div>
                   <div>
-                    <label className="font-bold text-lg">Request ID</label>
+                    <label className="font-medium text-base">Request ID</label>
                     <p className="mt-1">{request.id}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-bold text-lg">Request Type</label>
+                    <label className="font-medium text-base">
+                      Request Type
+                    </label>
                     <p className="mt-1">
                       {REQUEST_TYPE_TEXT_MAP[request.type]}
                     </p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-bold text-lg">Request Status</label>
+                    <label className="font-medium text-base">
+                      Request Status
+                    </label>
                     <p className="mt-1">
                       <span
                         className={
@@ -74,24 +89,20 @@ export default function Show({ request }) {
                       </span>
                     </p>
                   </div>
-                  <div className="mt-4">
-                    <label className="font-bold text-lg">Created By</label>
-                    <p className="mt-1">{request.user.name}</p>
-                  </div>
                 </div>
                 <div>
                   <div>
-                    <label className="font-bold text-lg">Create Date</label>
+                    <label className="font-medium text-base">Create Date</label>
                     <p className="mt-1">{request.created_at}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-bold text-lg">
+                    <label className="font-medium text-base">
                       Last Update Date
                     </label>
                     <p className="mt-1">{request.updated_at}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-bold text-lg">Verified By</label>
+                    <label className="font-medium text-base">Verified By</label>
                     <p className="mt-1">{request.verifiedBy?.name || "NA"}</p>
                   </div>
                 </div>
@@ -99,23 +110,31 @@ export default function Show({ request }) {
 
               <div className="grid md:gap-1 md:grid-cols-2 mt-4">
                 <div>
-                  <label className="font-bold text-2xl">Request Data</label>
+                  <label className="font-semibold text-2xl">Request Data</label>
                   <Data data={request.data} request={request} />
                 </div>
                 {request.old_data ? (
                   <div className="md:mt-0 mt-4">
-                    <label className="font-bold text-2xl">
-                      Request Old Data
-                    </label>
+                    <label className="font-semibold text-2xl">Old Data</label>
                     <Data data={request.old_data} request={request} />
                   </div>
                 ) : (
                   ""
                 )}
               </div>
-              <div className="mt-4">
-                <label className="font-bold text-lg">Comment</label>
-                <p className="mt-1">{request.comment || "NA"}</p>
+              <div className="grid md:gap-1 md:grid-cols-2 mt-4">
+                <div>
+                  <label className="font-medium text-base">Comment</label>
+                  <p className="mt-1">{request.comment || "NA"}</p>
+                </div>
+                <div className="md:mt-0 mt-4 flex items-center">
+                  <p
+                    className="underline text-base text-blue-600 hover:cursor-pointer hover:text-blue-800"
+                    onClick={confirmUserDeletion}
+                  >
+                    View Aadhar Card
+                  </p>
+                </div>
               </div>
               <div className="my-4 text-center">
                 <button
@@ -149,6 +168,23 @@ export default function Show({ request }) {
                   Delete
                 </button>
               </div>
+
+              <Modal show={confirmingUserDeletion} onClose={closeModal}>
+                <div className="p-6">
+                  <div>
+                    <img
+                      src={request.data.aadhar_image_path}
+                      alt="Aadhar image"
+                      className="w-full h-[500px] object-contain"
+                    />
+                  </div>
+                  <div className="mt-6 flex justify-end">
+                    <SecondaryButton onClick={closeModal}>
+                      Cancel
+                    </SecondaryButton>
+                  </div>
+                </div>
+              </Modal>
             </div>
           </div>
         </div>

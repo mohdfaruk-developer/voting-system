@@ -8,6 +8,7 @@ use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\StoreVoterRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\RequestResource;
+use App\Http\Resources\VoterResource;
 use App\Models\RequestModel;
 use App\Models\Voter;
 use Illuminate\Http\Request;
@@ -52,10 +53,14 @@ class RequestController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $formRequest)
     {
+        $voter = Voter::find($formRequest->voter_id);
+
         // Return the form for creating a new request
-        return Inertia::render('Requests/Create');
+        return Inertia::render('Requests/Create', [
+            'voter' => $voter ? VoterResource::make($voter) : null,
+        ]);
     }
 
     /**
@@ -63,10 +68,11 @@ class RequestController extends Controller
      */
     public function store(StoreVoterRequest $formRequest)
     {
+        $voter = Voter::find($formRequest->voter_id);
         // Validate and store the request data
-        $validatedData = RequestModel::getVoterRequestData($formRequest);
+        $validatedData = RequestModel::getVoterRequestData($formRequest, $voter);
 
-        if (Voter::where([
+        if ($formRequest->request_type === RequestModel::TYPE_NEW_VOTER && Voter::where([
             'user_id' => $formRequest->user()->id,
             'active' => true,
         ])->exists()) {

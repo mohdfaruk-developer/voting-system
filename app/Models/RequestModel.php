@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 #[ObservedBy([RequestObserver::class])]
@@ -86,16 +87,24 @@ class RequestModel extends Model
         if ($model) {
             $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion'];
             foreach ($keys as $key) {
-                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
+                if ($key === 'date_of_birth') {
+                    if (date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
+                        $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
+                        $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
+                    }
+
+                    continue;
+                }
+                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
             }
+            $data['data']['voter_id'] = $model->id;
             $data += [
                 'user_id' => $request->user()->id,
                 'type' => $request['request_type'],
                 'status' => self::STATUS_PENDING,
-                'id' => $model->id,
             ];
         } else {
             $data = [
@@ -149,5 +158,18 @@ class RequestModel extends Model
             'data' => 'json',
             'old_data' => 'json',
         ];
+    }
+
+    /**
+     * Delete the request.
+     */
+    public function delete()
+    {
+        if (Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
+            // Delete the request
+            return parent::delete();
+        }
+
+        return false;
     }
 }
