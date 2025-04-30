@@ -44,7 +44,10 @@ class RequestObserver
                 }
                 // Update the voter's details
                 $data = $requestModel->data;
-                unset($data['voter_id']);
+                if (isset($data['voter_alive']) && ! $data['voter_alive']) {
+                    $data = ['active' => false];
+                }
+                unset($data['voter_id'], $data['voter_alive']);
                 $voter->update($data);
             }
 

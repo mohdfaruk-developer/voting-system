@@ -85,14 +85,17 @@ class RequestModel extends Model
     public static function getVoterRequestData(Request $request, ?Voter $model = null): array
     {
         if ($model) {
-            $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion'];
+            $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion', 'voter_alive'];
             foreach ($keys as $key) {
-                if ($key === 'date_of_birth') {
-                    if (date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
-                        $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
-                        $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
-                    }
-
+                if ($key === 'voter_alive' && ! $request[$key]) {
+                    $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
+                    $data['old_data'][$key] = true;
+                }
+                if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
+                    $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
+                    $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
+                }
+                if (in_array($key, ['voter_alive', 'date_of_birth'])) {
                     continue;
                 }
                 if (isset($request[$key]) && $request[$key] != $model->{$key}) {

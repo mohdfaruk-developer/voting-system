@@ -75,6 +75,9 @@ class StoreVoterRequest extends FormRequest
                 'mimes:jpeg,png,jpg,gif,svg',
                 'max:2048', // 2MB
             ],
+            'voter_alive' => [
+                'boolean',
+            ],
         ];
     }
 }

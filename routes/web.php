@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\CandidateRequestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\VoterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,7 +24,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Request routes
-    Route::resource('requests', RequestController::class);
+    Route::resource('requests', RequestController::class)->except('edit');
+    Route::resource('candidate-requests', CandidateRequestController::class)->only(['create', 'store']);
+
+    // Voter rotes
+    Route::resource('voters', VoterController::class)->only(['index', 'show', 'update']);
 });
 
 require __DIR__ . '/auth.php';

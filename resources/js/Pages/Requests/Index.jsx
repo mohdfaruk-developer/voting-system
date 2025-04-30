@@ -6,7 +6,7 @@ import {
   REQUEST_STATUS_TEXT_MAP,
   REQUEST_TYPE_TEXT_MAP,
 } from "@/constants.jsx";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 import SecondaryButton from "@/Components/SecondaryButton";
 
@@ -16,6 +16,7 @@ export default function Index({
   success,
   error,
 }) {
+  const user = usePage().props.auth.user;
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -222,30 +223,34 @@ export default function Index({
                             {request.verifiedBy?.name}
                           </td>
                           <td className="px-3 py-2 text-nowrap text-center">
-                            <button
-                              disabled={request.status !== "pending"}
-                              onClick={(e) => approveRequest(request)}
-                              className={
-                                "border border-green-500 text-green-600 hover:bg-green-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
-                                (request.status !== "pending"
-                                  ? " cursor-not-allowed"
-                                  : "")
-                              }
-                            >
-                              Approve
-                            </button>
-                            <button
-                              disabled={request.status !== "pending"}
-                              onClick={(e) => rejectRequest(request)}
-                              className={
-                                "border border-amber-500 text-amber-600 hover:bg-amber-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
-                                (request.status !== "pending"
-                                  ? " cursor-not-allowed"
-                                  : "")
-                              }
-                            >
-                              Reject
-                            </button>
+                            {user.is_admin && (
+                              <>
+                                <button
+                                  disabled={request.status !== "pending"}
+                                  onClick={(e) => approveRequest(request)}
+                                  className={
+                                    "border border-green-500 text-green-600 hover:bg-green-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
+                                    (request.status !== "pending"
+                                      ? " cursor-not-allowed"
+                                      : "")
+                                  }
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  disabled={request.status !== "pending"}
+                                  onClick={(e) => rejectRequest(request)}
+                                  className={
+                                    "border border-amber-500 text-amber-600 hover:bg-amber-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
+                                    (request.status !== "pending"
+                                      ? " cursor-not-allowed"
+                                      : "")
+                                  }
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            )}
                             <button
                               disabled={request.status !== "pending"}
                               onClick={(e) => deleteRequest(request)}

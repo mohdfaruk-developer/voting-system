@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import {
   REQUEST_STATUS_CLASS_MAP,
   REQUEST_STATUS_TEXT_MAP,
@@ -11,6 +11,7 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Show({ request }) {
+  const user = usePage().props.auth.user;
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const confirmUserDeletion = () => {
     setConfirmingUserDeletion(true);
@@ -137,26 +138,34 @@ export default function Show({ request }) {
                 </div>
               </div>
               <div className="my-4 text-center">
-                <button
-                  disabled={request.status !== "pending"}
-                  onClick={(e) => approveRequest(request)}
-                  className={
-                    "mx-2 border border-green-500 text-green-600 hover:bg-green-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
-                    (request.status !== "pending" ? " cursor-not-allowed" : "")
-                  }
-                >
-                  Approve
-                </button>
-                <button
-                  disabled={request.status !== "pending"}
-                  onClick={(e) => rejectRequest(request)}
-                  className={
-                    "mx-2 border border-amber-500 text-amber-600 hover:bg-amber-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
-                    (request.status !== "pending" ? " cursor-not-allowed" : "")
-                  }
-                >
-                  Reject
-                </button>
+                {user.is_admin && (
+                  <>
+                    <button
+                      disabled={request.status !== "pending"}
+                      onClick={(e) => approveRequest(request)}
+                      className={
+                        "mx-2 border border-green-500 text-green-600 hover:bg-green-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
+                        (request.status !== "pending"
+                          ? " cursor-not-allowed"
+                          : "")
+                      }
+                    >
+                      Approve
+                    </button>
+                    <button
+                      disabled={request.status !== "pending"}
+                      onClick={(e) => rejectRequest(request)}
+                      className={
+                        "mx-2 border border-amber-500 text-amber-600 hover:bg-amber-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
+                        (request.status !== "pending"
+                          ? " cursor-not-allowed"
+                          : "")
+                      }
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
                 <button
                   disabled={request.status !== "pending"}
                   onClick={(e) => deleteRequest(request)}

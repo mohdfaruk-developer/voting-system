@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\StoreVoterRequest;
 use App\Http\Requests\UpdateRequestRequest;
 use App\Http\Resources\RequestResource;
@@ -17,7 +16,7 @@ use Inertia\Inertia;
 class RequestController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the request.
      */
     public function index(Request $formRequest)
     {
@@ -51,11 +50,14 @@ class RequestController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a voter request.
      */
     public function create(Request $formRequest)
     {
         $voter = Voter::find($formRequest->voter_id);
+        if ($voter && ! $voter->active) {
+            return redirect()->route('requests.index')->with('error', "Can't create update-voter-request because voter is inactivated.");
+        }
 
         // Return the form for creating a new request
         return Inertia::render('Requests/Create', [
@@ -64,11 +66,14 @@ class RequestController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created voter request in storage.
      */
     public function store(StoreVoterRequest $formRequest)
     {
         $voter = Voter::find($formRequest->voter_id);
+        if ($voter && ! $voter->active) {
+            return redirect()->route('requests.index')->with('error', "Can't create update-voter-request because voter is inactivated.");
+        }
         // Validate and store the request data
         $validatedData = RequestModel::getVoterRequestData($formRequest, $voter);
 
@@ -87,7 +92,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified request.
      */
     public function show(RequestModel $request)
     {
@@ -104,7 +109,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified request in storage.
      */
     public function update(UpdateRequestRequest $formRequest, RequestModel $request)
     {
@@ -128,22 +133,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function storeCandidateRequest(StoreCandidateRequest $formRequest)
-    {
-        // Validate and store the candidate request data
-        $validatedData = $formRequest->validated();
-
-        // Create a new candidate request
-        RequestModel::create($validatedData);
-
-        // Redirect to the requests index page
-        return redirect()->route('requests.index')->with('success', 'Candidate request created successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove the specified request from storage.
      */
     public function destroy(RequestModel $request)
     {
