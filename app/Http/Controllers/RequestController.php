@@ -43,7 +43,7 @@ class RequestController extends Controller
 
         return Inertia::render('Requests/Index', [
             'requests' => RequestResource::collection($requests),
-            'queryParams' => request()->query() ?: null,
+            'queryParams' => $formRequest->query() ?: null,
             'success' => session('success'),
             'error' => session('error'),
         ]);
@@ -115,7 +115,7 @@ class RequestController extends Controller
     {
         // Validate and update the request data
         $validatedData = $formRequest->validated();
-        $user = request()->user();
+        $user = $formRequest->user();
         if (! $user->is_admin) {
             // Check if the user is authorized to update the request
             abort(403, 'Unauthorized action.');

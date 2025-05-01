@@ -78,7 +78,7 @@ export default function Create({ auth, voter }) {
         </div>
       }
     >
-      <Head title="Requests" />
+      <Head title="Voter Requests" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -259,7 +259,7 @@ export default function Create({ auth, voter }) {
                   <InputError message={errors.religion} className="mt-2" />
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-4 md:mt-8">
                   <InputLabel
                     htmlFor="request_aadhar_image"
                     value="Aadhar Image(max 2MB)"

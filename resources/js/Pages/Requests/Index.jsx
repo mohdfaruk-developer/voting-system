@@ -149,9 +149,8 @@ export default function Index({
                   </thead>
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                     <tr className="text-nowrap">
-                      <th className="px-3 py-3">
+                      <th colSpan="6" className="py-3">
                         <SelectInput
-                          className="w-full"
                           defaultValue={queryParams.status}
                           onChange={(e) =>
                             searchFieldChanged("status", e.target.value)
@@ -162,10 +161,8 @@ export default function Index({
                           <option value="rejected">Rejected</option>
                           <option value="approved">Approved</option>
                         </SelectInput>
-                      </th>
-                      <th className="px-3 py-3">
                         <SelectInput
-                          className="w-full"
+                          className="mx-4"
                           defaultValue={queryParams.type}
                           onChange={(e) =>
                             searchFieldChanged("type", e.target.value)
@@ -179,15 +176,10 @@ export default function Index({
                             Update Candidate
                           </option>
                         </SelectInput>
-                      </th>
-                      <th className="px-3 py-3">
                         <SecondaryButton onClick={() => clearFilter()}>
                           Clear Filter
                         </SecondaryButton>
                       </th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
                     </tr>
                   </thead>
                   {requests.data.length ? (
@@ -198,14 +190,14 @@ export default function Index({
                           key={request.id}
                         >
                           <td className="px-3 py-2">{request.id}</td>
-                          <th className="px-3 py-2 hover:underline">
+                          <td className="px-3 py-2 text-blue-600 hover:text-blue-800 underline">
                             <Link
                               href={route("requests.show", request.id)}
                               title="View Details"
                             >
                               {REQUEST_TYPE_TEXT_MAP[request.type]}
                             </Link>
-                          </th>
+                          </td>
                           <td className="px-3 py-2">
                             <span
                               className={

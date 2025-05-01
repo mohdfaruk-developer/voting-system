@@ -4,7 +4,7 @@ export default function Welcome({ auth }) {
   return (
     <>
       <Head title="Welcome" />
-      <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
+      <div className="text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900">
         <div className="relative flex min-h-screen flex-col items-center">
           <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
             <header className="grid grid-cols-2 items-center gap-2 py-10">

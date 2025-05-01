@@ -64,11 +64,13 @@ export default function Show({ request }) {
               <div className="grid gap-1 grid-cols-2 mt-2">
                 <div>
                   <div>
-                    <label className="font-medium text-base">Request ID</label>
+                    <label className="font-semibold text-base">
+                      Request ID
+                    </label>
                     <p className="mt-1">{request.id}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-medium text-base">
+                    <label className="font-semibold text-base">
                       Request Type
                     </label>
                     <p className="mt-1">
@@ -76,7 +78,7 @@ export default function Show({ request }) {
                     </p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-medium text-base">
+                    <label className="font-semibold text-base">
                       Request Status
                     </label>
                     <p className="mt-1">
@@ -93,17 +95,21 @@ export default function Show({ request }) {
                 </div>
                 <div>
                   <div>
-                    <label className="font-medium text-base">Create Date</label>
+                    <label className="font-semibold text-base">
+                      Create Date
+                    </label>
                     <p className="mt-1">{request.created_at}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-medium text-base">
+                    <label className="font-semibold text-base">
                       Last Update Date
                     </label>
                     <p className="mt-1">{request.updated_at}</p>
                   </div>
                   <div className="mt-4">
-                    <label className="font-medium text-base">Verified By</label>
+                    <label className="font-semibold text-base">
+                      Verified By
+                    </label>
                     <p className="mt-1">{request.verifiedBy?.name || "NA"}</p>
                   </div>
                 </div>
@@ -125,7 +131,7 @@ export default function Show({ request }) {
               </div>
               <div className="grid md:gap-1 md:grid-cols-2 mt-4">
                 <div>
-                  <label className="font-medium text-base">Comment</label>
+                  <label className="font-semibold text-base">Comment</label>
                   <p className="mt-1">{request.comment || "NA"}</p>
                 </div>
                 <div className="md:mt-0 mt-4 flex items-center">
