@@ -21,6 +21,7 @@ return new class() extends Migration
             $table->string('level_name');
             $table->timestamp('start_on');
             $table->timestamp('end_on');
+            $table->foreignId('last_update_by')->nullable();
             $table->timestamps();
         });
     }

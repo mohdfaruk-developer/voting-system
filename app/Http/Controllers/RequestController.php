@@ -11,6 +11,8 @@ use App\Http\Resources\VoterResource;
 use App\Models\RequestModel;
 use App\Models\Voter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class RequestController extends Controller
@@ -20,16 +22,16 @@ class RequestController extends Controller
      */
     public function index(Request $formRequest)
     {
-        $query = RequestModel::with(['verifiedBy']);
+        $query = RequestModel::with(['lastUpdateBy']);
 
-        $sortField = request('sort_field', 'created_at');
-        $sortDirection = request('sort_direction', 'desc');
+        $sortField = $formRequest->query('sort_field', 'created_at');
+        $sortDirection = $formRequest->query('sort_direction', 'desc');
 
-        if (request('type')) {
-            $query->where('type', request('type'));
+        if ($formRequest->has('type')) {
+            $query->where('type', $formRequest->type);
         }
-        if (request('status')) {
-            $query->where('status', request('status'));
+        if ($formRequest->has('status')) {
+            $query->where('status', $formRequest->status);
         }
 
         $user = $formRequest->user();
@@ -55,8 +57,10 @@ class RequestController extends Controller
     public function create(Request $formRequest)
     {
         $voter = Voter::find($formRequest->voter_id);
-        if ($voter && ! $voter->active) {
-            return redirect()->route('requests.index')->with('error', "Can't create update-voter-request because voter is inactivated.");
+
+        if ($voter->user_id !== $formRequest->user()->id) {
+            // Check if the user is authorized to create the request
+            abort(403, 'Unauthorized action.');
         }
 
         // Return the form for creating a new request
@@ -71,8 +75,12 @@ class RequestController extends Controller
     public function store(StoreVoterRequest $formRequest)
     {
         $voter = Voter::find($formRequest->voter_id);
-        if ($voter && ! $voter->active) {
+        if ($voter && $formRequest->request_type === RequestModel::TYPE_EXIST_VOTER && ! $voter->active) {
             return redirect()->route('requests.index')->with('error', "Can't create update-voter-request because voter is inactivated.");
+        }
+        if ($voter && $voter->user_id !== $formRequest->user()->id) {
+            // Check if the user is authorized to create the request
+            abort(403, 'Unauthorized action.');
         }
         // Validate and store the request data
         $validatedData = RequestModel::getVoterRequestData($formRequest, $voter);
@@ -85,10 +93,10 @@ class RequestController extends Controller
         }
 
         // Create a new request
-        $formRequest = RequestModel::create($validatedData);
+        $request = RequestModel::create($validatedData);
 
         // Redirect to the requests index page
-        return redirect()->route('requests.index')->with('success', 'Request created successfully.');
+        return redirect()->route('requests.show', $request)->with('success', 'Request created successfully.');
     }
 
     /**
@@ -104,7 +112,9 @@ class RequestController extends Controller
 
         // Return the details of the specified request
         return Inertia::render('Requests/Show', [
-            'request' => RequestResource::make($request->load(['verifiedBy', 'user'])),
+            'request' => RequestResource::make($request->load(['lastUpdateBy', 'user'])),
+            'success' => session('success'),
+            'error' => session('error'),
         ]);
     }
 
@@ -122,14 +132,26 @@ class RequestController extends Controller
         }
         // Check if the request is already approved or rejected
         if ($request->status !== RequestModel::STATUS_PENDING) {
-            return redirect()->route('requests.index')->with('error', 'Already request is approved or rejected.');
+            return redirect()->route('requests.show', $request)->with('error', 'Already request is approved or rejected.');
         }
-        // Update the request with the validated data
-        $validatedData['verified_by'] = $user->id;
-        $request->update($validatedData);
+        try {
+            DB::beginTransaction();
+            // Update the request with the validated data
+            $validatedData['last_update_by'] = $user->id;
+            $request->update($validatedData);
+            DB::commit();
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+
+            return redirect()->route('requests.show', $request)->with('error', Str::before($e->getMessage(), '(Connection:'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('requests.show', $request)->with('error', $e->getMessage());
+        }
 
         // Redirect to the requests index page
-        return redirect()->route('requests.index')->with('success', 'Request updated successfully.');
+        return redirect()->route('requests.show', $request)->with('success', 'Request updated successfully.');
     }
 
     /**
@@ -144,7 +166,7 @@ class RequestController extends Controller
         }
         // Check if the request is already approved or rejected
         if ($request->status !== RequestModel::STATUS_PENDING) {
-            return redirect()->route('requests.index')->with('error', 'Cannot delete an approved or rejected request.');
+            return redirect()->route('requests.show', $request)->with('error', 'Cannot delete an approved or rejected request.');
         }
         // Delete the specified request
         $request->delete();

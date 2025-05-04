@@ -25,7 +25,7 @@ class VoterController extends Controller
         $query = Voter::query();
         if ($request->search) {
             $query->whereAny(
-                ['voter_number', 'name', 'aadhar_number', 'address', 'city', 'state', 'country', 'religion'],
+                ['voter_number', 'name', 'aadhar_number', 'address', 'city', 'state', 'country', 'religion', 'pin_code'],
                 'like',
                 '%' . $request->search . '%'
             );
@@ -35,7 +35,7 @@ class VoterController extends Controller
         }
         $voters = $query->latest()->paginate(15)->onEachSide(1);
 
-        return inertia('Voter/Index', [
+        return inertia('Voters/Index', [
             'voters' => VoterResource::collection($voters),
             'queryParams' => $request->query() ?: null,
             'success' => session('success'),
@@ -54,7 +54,7 @@ class VoterController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return inertia('Voter/Show', [
+        return inertia('Voters/Show', [
             'voter' => VoterResource::make($voter),
         ]);
     }

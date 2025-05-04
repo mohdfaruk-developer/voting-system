@@ -17,6 +17,7 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('name');
+            $table->foreignId('election_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
             $table->string('qualification')->nullable();
             $table->string('property')->nullable();

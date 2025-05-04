@@ -2,11 +2,10 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
 export default function Index({ voters, queryParams = null, success, error }) {
   queryParams = queryParams || {};
-  console.log(queryParams);
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;

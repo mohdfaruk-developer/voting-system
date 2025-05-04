@@ -22,7 +22,7 @@ class DashboardController extends Controller
         ])->first();
 
         return Inertia::render('Dashboard', [
-            'voter' => VoterResource::make($voter),
+            'voter' => $voter ? VoterResource::make($voter) : null,
         ]);
     }
 }

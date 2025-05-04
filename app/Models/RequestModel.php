@@ -8,6 +8,7 @@ use App\Observers\RequestObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -60,13 +61,13 @@ class RequestModel extends Model
         'old_data',
         'status',
         'comment',
-        'verified_by',
+        'last_update_by',
     ];
 
     /**
      * Get user
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -74,9 +75,9 @@ class RequestModel extends Model
     /**
      * Get verified by
      */
-    public function verifiedBy()
+    public function lastUpdateBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'verified_by');
+        return $this->belongsTo(User::class, 'last_update_by');
     }
 
     /**
@@ -88,11 +89,11 @@ class RequestModel extends Model
             $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion', 'voter_alive'];
             foreach ($keys as $key) {
                 if ($key === 'voter_alive' && ! $request[$key]) {
-                    $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
+                    $data['data'][$key] = (bool) $request[$key];
                     $data['old_data'][$key] = true;
                 }
                 if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
-                    $data['data'][$key] = date('Y-m-d', strtotime($request[$key]));
+                    $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
                 }
                 if (in_array($key, ['voter_alive', 'date_of_birth'])) {
@@ -166,7 +167,7 @@ class RequestModel extends Model
     /**
      * Delete the request.
      */
-    public function delete()
+    public function delete(): bool
     {
         if (Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
             // Delete the request

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Vote extends Model
 {
@@ -20,12 +21,13 @@ class Vote extends Model
         'election_id',
         'candidate_id',
         'voter_id',
+        'last_update_by',
     ];
 
     /**
      * Get election
      */
-    public function election()
+    public function election(): BelongsTo
     {
         return $this->belongsTo(Election::class);
     }
@@ -33,7 +35,7 @@ class Vote extends Model
     /**
      * Get candidate
      */
-    public function candidate()
+    public function candidate(): BelongsTo
     {
         return $this->belongsTo(Candidate::class);
     }
@@ -41,7 +43,7 @@ class Vote extends Model
     /**
      * Get voter
      */
-    public function voter()
+    public function voter(): BelongsTo
     {
         return $this->belongsTo(Voter::class);
     }

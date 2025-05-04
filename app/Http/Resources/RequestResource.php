@@ -30,7 +30,7 @@ class RequestResource extends JsonResource
             'old_data' => $this->old_data,
             'status' => $this->status,
             'comment' => $this->comment,
-            'verifiedBy' => UserResource::make($this->whenLoaded('verifiedBy')),
+            'lastUpdateBy' => UserResource::make($this->whenLoaded('lastUpdateBy')),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

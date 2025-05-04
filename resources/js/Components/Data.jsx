@@ -25,7 +25,7 @@ export default function Data({ data }) {
           <span className="mx-2 mt-1">{data.religion}</span>
         </div>
       )}
-      {data.aadhar_number && (
+      {"voter_alive" in data && (
         <div className="mt-2">
           <span className="font-medium text-base">Voter alive:</span>
           <span className="mx-2 mt-1">{data.voter_alive ? "Yes" : "No"}</span>

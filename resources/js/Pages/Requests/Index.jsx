@@ -11,12 +11,13 @@ import TableHeading from "@/Components/TableHeading";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Index({
+  auth,
   requests,
   queryParams = null,
   success,
   error,
 }) {
-  const user = usePage().props.auth.user;
+  const user = auth.user;
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -212,7 +213,7 @@ export default function Index({
                             {request.created_at}
                           </td>
                           <td className="px-3 py-2">
-                            {request.verifiedBy?.name}
+                            {request.lastUpdateBy?.name}
                           </td>
                           <td className="px-3 py-2 text-nowrap text-center">
                             {user.is_admin && (

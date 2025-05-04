@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router, usePage } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import {
   REQUEST_STATUS_CLASS_MAP,
   REQUEST_STATUS_TEXT_MAP,
@@ -10,8 +10,8 @@ import { useState } from "react";
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 
-export default function Show({ request }) {
-  const user = usePage().props.auth.user;
+export default function Show({ auth, request, success, error }) {
+  const user = auth.user;
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const confirmUserDeletion = () => {
     setConfirmingUserDeletion(true);
@@ -57,8 +57,18 @@ export default function Show({ request }) {
       }
     >
       <Head title={`Request for ${REQUEST_TYPE_TEXT_MAP[request.type]}`} />
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="py-12">
+          {success && (
+            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
+              {success}
+            </div>
+          )}
+          {error && (
+            <div className="bg-red-500 py-2 px-4 text-white rounded mb-4">
+              {error}
+            </div>
+          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-10 text-gray-900 dark:text-gray-100">
               <div className="grid gap-1 grid-cols-2 mt-2">
@@ -110,7 +120,7 @@ export default function Show({ request }) {
                     <label className="font-semibold text-base">
                       Verified By
                     </label>
-                    <p className="mt-1">{request.verifiedBy?.name || "NA"}</p>
+                    <p className="mt-1">{request.lastUpdateBy?.name || "NA"}</p>
                   </div>
                 </div>
               </div>

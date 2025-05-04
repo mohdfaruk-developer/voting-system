@@ -21,7 +21,7 @@ return new class() extends Migration
             $table->json('old_data')->nullable();
             $table->string('status');
             $table->text('comment')->nullable();
-            $table->foreignId('verified_by')->nullable();
+            $table->foreignId('last_update_by')->nullable();
             $table->timestamps();
         });
     }

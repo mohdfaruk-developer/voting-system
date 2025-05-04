@@ -38,7 +38,7 @@ class RequestModelFactory extends Factory
                 'religion' => fake()->word(),
             ],
             'old_data' => null,
-            'verified_by' => null,
+            'last_update_by' => null,
             'comment' => null,
         ];
     }
@@ -67,7 +67,7 @@ class RequestModelFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'status' => RequestModel::STATUS_APPROVED,
-            'verified_by' => User::where('is_admin', true)->get()->random()->id,
+            'last_update_by' => User::where('is_admin', true)->get()->random()->id,
         ]);
     }
 
@@ -76,7 +76,7 @@ class RequestModelFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'status' => RequestModel::STATUS_REJECTED,
             'comment' => fake()->sentence(),
-            'verified_by' => User::where('is_admin', true)->get()->random()->id,
+            'last_update_by' => User::where('is_admin', true)->get()->random()->id,
         ]);
     }
 }

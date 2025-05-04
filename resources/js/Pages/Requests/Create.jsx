@@ -8,7 +8,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function Create({ auth, voter }) {
-  const { data, setData, post, errors, reset } = useForm({
+  const { data, setData, post, errors } = useForm({
     voter_id: voter ? voter.data.id : "",
     request_type: voter ? "exist_voter" : "new_voter",
     name: voter ? voter.data.name : auth.user.name,
@@ -21,6 +21,7 @@ export default function Create({ auth, voter }) {
     pin_code: voter ? voter.data.pin_code : "",
     religion: voter ? voter.data.religion : "",
     aadhar_image: "",
+    voter_alive: voter ? voter.data.status == "Active" : true,
   });
 
   const [countries, setCountries] = useState([]);
@@ -253,7 +254,7 @@ export default function Create({ auth, voter }) {
                     <option value="buddhism">Buddhism</option>
                     <option value="jainism">Jainism</option>
                     <option value="judaism">Judaism</option>
-                    <option value="other">other</option>
+                    <option value="other">Other</option>
                   </SelectInput>
 
                   <InputError message={errors.religion} className="mt-2" />
@@ -276,14 +277,41 @@ export default function Create({ auth, voter }) {
                 </div>
               </div>
 
-              <div className="mt-4 text-right">
-                <Link
-                  href={route("requests.index")}
-                  className="mx-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 dark:focus:ring-offset-gray-800"
-                >
-                  Cancel
-                </Link>
-                <PrimaryButton>Submit</PrimaryButton>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
+                <div>
+                  {voter && (
+                    <div className="mt-4">
+                      <InputLabel
+                        htmlFor="request_voter_alive"
+                        value="Voter Alive"
+                      />
+
+                      <TextInput
+                        id="request_voter_alive"
+                        type="checkbox"
+                        name="voter_alive"
+                        checked={data.voter_alive}
+                        className="mt-1"
+                        onChange={(e) =>
+                          setData("voter_alive", e.target.checked)
+                        }
+                      />
+                      <InputError
+                        message={errors.voter_alive}
+                        className="mt-2"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4 text-right">
+                  <Link
+                    href={route("requests.index")}
+                    className="mx-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 dark:focus:ring-offset-gray-800"
+                  >
+                    Cancel
+                  </Link>
+                  <PrimaryButton>Submit</PrimaryButton>
+                </div>
               </div>
             </form>
           </div>
