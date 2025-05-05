@@ -19,6 +19,7 @@ return new class() extends Migration
             $table->string('name');
             $table->foreignId('election_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
+            $table->string('candidate_image')->nullable();
             $table->string('qualification')->nullable();
             $table->string('property')->nullable();
             $table->string('address');
@@ -27,6 +28,8 @@ return new class() extends Migration
             $table->string('country');
             $table->string('pin_code')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'election_id']);
         });
     }
 

@@ -24,7 +24,7 @@ export default function Show({ auth, request, success, error }) {
     if (!window.confirm("Are you sure you want to approve the request?")) {
       return;
     }
-    router.put(route("requests.update", request.id), {
+    router.put(route("requests.update", request), {
       status: "approved",
     });
   };
@@ -34,7 +34,7 @@ export default function Show({ auth, request, success, error }) {
     if (comment === null) {
       return;
     }
-    router.put(route("requests.update", request.id), {
+    router.put(route("requests.update", request), {
       status: "rejected",
       comment: comment,
     });
@@ -44,7 +44,7 @@ export default function Show({ auth, request, success, error }) {
     if (!window.confirm("Are you sure you want to delete the request?")) {
       return;
     }
-    router.delete(route("requests.destroy", request.id));
+    router.delete(route("requests.destroy", request));
   };
   return (
     <AuthenticatedLayout
@@ -120,7 +120,9 @@ export default function Show({ auth, request, success, error }) {
                     <label className="font-semibold text-base">
                       Verified By
                     </label>
-                    <p className="mt-1">{request.lastUpdateBy?.name || "NA"}</p>
+                    <p className="mt-1">
+                      {request.lastUpdatedBy?.name || "NA"}
+                    </p>
                   </div>
                 </div>
               </div>

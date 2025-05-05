@@ -22,7 +22,7 @@ class RequestController extends Controller
      */
     public function index(Request $formRequest)
     {
-        $query = RequestModel::with(['lastUpdateBy']);
+        $query = RequestModel::with(['lastUpdatedBy']);
 
         $sortField = $formRequest->query('sort_field', 'created_at');
         $sortDirection = $formRequest->query('sort_direction', 'desc');
@@ -58,7 +58,7 @@ class RequestController extends Controller
     {
         $voter = Voter::find($formRequest->voter_id);
 
-        if ($voter->user_id !== $formRequest->user()->id) {
+        if ($voter && $voter->user_id !== $formRequest->user()->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');
         }
@@ -112,7 +112,7 @@ class RequestController extends Controller
 
         // Return the details of the specified request
         return Inertia::render('Requests/Show', [
-            'request' => RequestResource::make($request->load(['lastUpdateBy', 'user'])),
+            'request' => RequestResource::make($request->load(['lastUpdatedBy', 'user'])),
             'success' => session('success'),
             'error' => session('error'),
         ]);
@@ -137,7 +137,7 @@ class RequestController extends Controller
         try {
             DB::beginTransaction();
             // Update the request with the validated data
-            $validatedData['last_update_by'] = $user->id;
+            $validatedData['last_updated_by'] = $user->id;
             $request->update($validatedData);
             DB::commit();
         } catch (\Illuminate\Database\QueryException $e) {

@@ -1,12 +1,11 @@
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function Show({ voter }) {
   const voterData = voter.data;
-  const user = usePage().props.auth.user;
 
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const confirmUserDeletion = () => {

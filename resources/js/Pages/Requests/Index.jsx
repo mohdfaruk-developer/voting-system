@@ -47,7 +47,7 @@ export default function Index({
     if (!window.confirm("Are you sure you want to approve the request?")) {
       return;
     }
-    router.put(route("requests.update", request.id), {
+    router.put(route("requests.update", request), {
       status: "approved",
     });
   };
@@ -57,7 +57,7 @@ export default function Index({
     if (comment === null) {
       return;
     }
-    router.put(route("requests.update", request.id), {
+    router.put(route("requests.update", request), {
       status: "rejected",
       comment: comment,
     });
@@ -67,7 +67,7 @@ export default function Index({
     if (!window.confirm("Are you sure you want to delete the request?")) {
       return;
     }
-    router.delete(route("requests.destroy", request.id));
+    router.delete(route("requests.destroy", request));
   };
 
   const clearFilter = () => {
@@ -193,7 +193,7 @@ export default function Index({
                           <td className="px-3 py-2">{request.id}</td>
                           <td className="px-3 py-2 text-blue-600 hover:text-blue-800 underline">
                             <Link
-                              href={route("requests.show", request.id)}
+                              href={route("requests.show", request)}
                               title="View Details"
                             >
                               {REQUEST_TYPE_TEXT_MAP[request.type]}
@@ -213,7 +213,7 @@ export default function Index({
                             {request.created_at}
                           </td>
                           <td className="px-3 py-2">
-                            {request.lastUpdateBy?.name}
+                            {request.lastUpdatedBy?.name}
                           </td>
                           <td className="px-3 py-2 text-nowrap text-center">
                             {user.is_admin && (

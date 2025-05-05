@@ -61,7 +61,7 @@ class RequestModel extends Model
         'old_data',
         'status',
         'comment',
-        'last_update_by',
+        'last_updated_by',
     ];
 
     /**
@@ -73,11 +73,11 @@ class RequestModel extends Model
     }
 
     /**
-     * Get verified by
+     * Get last updated by user
      */
-    public function lastUpdateBy(): BelongsTo
+    public function lastUpdatedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'last_update_by');
+        return $this->belongsTo(User::class, 'last_updated_by');
     }
 
     /**
@@ -107,13 +107,13 @@ class RequestModel extends Model
             $data['data']['voter_id'] = $model->id;
             $data += [
                 'user_id' => $request->user()->id,
-                'type' => $request['request_type'],
+                'type' => self::TYPE_EXIST_VOTER,
                 'status' => self::STATUS_PENDING,
             ];
         } else {
             $data = [
                 'user_id' => $request->user()->id,
-                'type' => $request['request_type'],
+                'type' => self::TYPE_NEW_VOTER,
                 'data' => [
                     'name' => $request['name'],
                     'date_of_birth' => $request['date_of_birth'],
@@ -139,13 +139,45 @@ class RequestModel extends Model
     /**
      * Prepare the data for candidate request.
      */
-    public static function getCandidateRequestData(array $request, Candidate $model): array
+    public static function getCandidateRequestData(Request $request, Candidate $model): array
     {
-        $data = [];
         if ($model) {
-            // code...
+            $keys = ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'];
+            foreach ($keys as $key) {
+                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
+                    $data['data'][$key] = $request[$key];
+                    $data['old_data'][$key] = $model->{$key};
+                }
+            }
+            $data['data']['election_id'] = $model->election_id;
+            $data['data']['candidate_id'] = $model->id;
+            $data += [
+                'user_id' => $request->user()->id,
+                'type' => self::TYPE_EXIST_CANDIDATE,
+                'status' => self::STATUS_PENDING,
+            ];
         } else {
-            // code...
+            $data = [
+                'user_id' => $request->user()->id,
+                'type' => self::TYPE_NEW_CANDIDATE,
+                'data' => [
+                    'name' => $request['name'],
+                    'election_id' => $request['election_id'],
+                    'description' => $request['description'],
+                    'qualification' => $request['qualification'],
+                    'property' => $request['property'],
+                    'address' => $request['address'],
+                    'city' => $request['city'],
+                    'state' => $request['state'],
+                    'country' => $request['country'],
+                    'pin_code' => $request['pin_code'],
+                ],
+                'status' => self::STATUS_PENDING,
+            ];
+        }
+        if ($request->hasFile('candidate_image')) {
+            // Store the uploaded file and get the path
+            $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/' . Str::random(), 'public');
         }
 
         return $data;

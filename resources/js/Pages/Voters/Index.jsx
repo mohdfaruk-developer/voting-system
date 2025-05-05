@@ -65,9 +65,6 @@ export default function Index({ voters, queryParams = null, success, error }) {
                           className="mr-4"
                           defaultValue={queryParams.search}
                           placeholder="Search box"
-                          onBlur={(e) =>
-                            searchFieldChanged("search", e.target.value)
-                          }
                           onKeyPress={(e) => onKeyPress("search", e)}
                         />
                         <SelectInput
@@ -92,7 +89,7 @@ export default function Index({ voters, queryParams = null, success, error }) {
                         >
                           <th className="px-3 py-2 text-blue-600 hover:text-blue-800 hover:underline">
                             <Link
-                              href={route("voters.show", voter.id)}
+                              href={route("voters.show", voter)}
                               title="View Details"
                             >
                               {voter.voter_number}

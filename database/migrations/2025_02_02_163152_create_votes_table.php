@@ -18,7 +18,7 @@ return new class() extends Migration
             $table->foreignId('election_id');
             $table->foreignId('candidate_id');
             $table->foreignId('voter_id');
-            $table->foreignId('last_update_by')->nullable();
+            $table->foreignId('last_updated_by')->nullable();
             $table->timestamps();
 
             $table->unique(['election_id', 'voter_id']);
