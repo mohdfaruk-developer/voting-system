@@ -38,6 +38,12 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                   Requests
                 </NavLink>
+                <NavLink
+                  href={route("elections.index")}
+                  active={route().current("elections.index")}
+                >
+                  Elections
+                </NavLink>
                 {user.is_admin && (
                   <NavLink
                     href={route("voters.index")}
@@ -150,6 +156,14 @@ export default function AuthenticatedLayout({ header, children }) {
               active={route().current("requests.index")}
             >
               Requests
+            </ResponsiveNavLink>
+          </div>
+          <div className="space-y-1 pb-3 pt-2">
+            <ResponsiveNavLink
+              href={route("elections.index")}
+              active={route().current("elections.index")}
+            >
+              Elections
             </ResponsiveNavLink>
           </div>
           {user.is_admin && (

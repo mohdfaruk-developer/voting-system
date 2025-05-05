@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CandidateRequestController;
+use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\VoterController;
@@ -25,10 +26,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Request routes
     Route::resource('requests', RequestController::class)->except('edit');
-    Route::resource('candidate-requests', CandidateRequestController::class)->only(['create', 'store']);
 
     // Voter rotes
     Route::resource('voters', VoterController::class)->only(['index', 'show', 'update']);
+
+    // Elections rotes
+    Route::resource('elections', ElectionController::class);
+
+    Route::resource('elections/{election}/requests', CandidateRequestController::class)->only(['create', 'store']);
 });
 
 require __DIR__ . '/auth.php';

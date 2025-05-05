@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Candidate extends Model
 {
@@ -19,6 +21,8 @@ class Candidate extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'election_id',
+        'candidate_image',
         'description',
         'qualification',
         'property',
@@ -34,8 +38,24 @@ class Candidate extends Model
      *
      * @return void
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get election
+     */
+    public function election(): BelongsTo
+    {
+        return $this->belongsTo(Election::class);
+    }
+
+    /**
+     * Get all votes
+     */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
     }
 }
