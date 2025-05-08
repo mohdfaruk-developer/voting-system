@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class VoterResource extends JsonResource
+class CandidateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,19 +20,20 @@ class VoterResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'voter_number' => $this->voter_number,
-            'date_of_birth' => $this->date_of_birth->format('Y-m-d'),
-            'status' => $this->active ? 'Active' : 'Inactive',
-            'aadhar_number' => $this->aadhar_number,
+            'description' => $this->description,
+            'qualification' => $this->qualification,
+            'candidate_image' => $this->candidate_image && ! (str_starts_with($this->candidate_image, 'http')) ?
+                Storage::url($this->candidate_image) : $this->candidate_image,
+            'property' => $this->property,
             'address' => $this->address,
             'city' => $this->city,
             'state' => $this->state,
             'country' => $this->country,
             'pin_code' => $this->pin_code,
-            'religion' => $this->religion,
-            'aadhar_image_path' => $this->aadhar_image_path && ! (str_starts_with($this->aadhar_image_path, 'http')) ?
-                Storage::url($this->aadhar_image_path) : $this->aadhar_image_path,
             'user_id' => $this->user_id,
+            'election_id' => $this->election_id,
+            'total_vote' => $this->when($this->election->end_on->isPast(), fn () => $this->votes_count ?? null),
+            'election' => ElectionResource::make($this->whenLoaded('election')),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

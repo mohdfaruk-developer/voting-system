@@ -139,7 +139,7 @@ class RequestModel extends Model
     /**
      * Prepare the data for candidate request.
      */
-    public static function getCandidateRequestData(Request $request, Candidate $model): array
+    public static function getCandidateRequestData(Request $request, ?Candidate $model = null): array
     {
         if ($model) {
             $keys = ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'];
@@ -201,7 +201,11 @@ class RequestModel extends Model
      */
     public function delete(): bool
     {
-        if (Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
+        if (isset($this->data['aadhar_image_path']) && Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
+            // Delete the request
+            return parent::delete();
+        }
+        if (isset($this->data['candidate_image']) && Storage::disk('public')->deleteDirectory(dirname($this->data['candidate_image']))) {
             // Delete the request
             return parent::delete();
         }

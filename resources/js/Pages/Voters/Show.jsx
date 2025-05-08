@@ -20,12 +20,12 @@ export default function Show({ voter }) {
       header={
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Voter Details
+            Voter: {voterData.name}
           </h2>
         </div>
       }
     >
-      <Head title="Voter Details" />
+      <Head title={`Voter ${voterData.name}`} />
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -138,11 +138,18 @@ export default function Show({ voter }) {
       </div>
       <Modal show={confirmingUserDeletion} onClose={closeModal}>
         <div className="p-6">
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Aadhar Card Image of voter user
+          </h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            This is the Aadhar card image of the voter user. Please verify the
+            details before proceeding with any actions.
+          </p>
           <div>
             <img
               src={voterData.aadhar_image_path}
               alt="Aadhar image"
-              className="w-full h-[500px] object-contain"
+              className="w-full h-[300px] object-contain"
             />
           </div>
           <div className="mt-6 flex justify-end">

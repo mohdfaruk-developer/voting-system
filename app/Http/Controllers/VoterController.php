@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateVoterRequest;
 use App\Http\Resources\VoterResource;
 use App\Models\Voter;
 use Illuminate\Http\Request;
@@ -57,13 +56,5 @@ class VoterController extends Controller
         return inertia('Voters/Show', [
             'voter' => VoterResource::make($voter),
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateVoterRequest $request, Voter $voter)
-    {
-        //
     }
 }

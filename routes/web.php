@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CandidateRequestController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\ProfileController;
@@ -28,12 +29,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('requests', RequestController::class)->except('edit');
 
     // Voter rotes
-    Route::resource('voters', VoterController::class)->only(['index', 'show', 'update']);
+    Route::resource('voters', VoterController::class)->only(['index', 'show']);
 
     // Elections rotes
     Route::resource('elections', ElectionController::class);
 
-    Route::resource('elections/{election}/requests', CandidateRequestController::class)->only(['create', 'store']);
+    Route::resource('elections/{election}/requests', CandidateRequestController::class)->only(['create', 'store'])->names('candidate-request');
+    Route::resource('elections/{election}/candidates', CandidateController::class)->only(['show', 'destroy']);
 });
 
 require __DIR__ . '/auth.php';

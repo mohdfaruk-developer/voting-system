@@ -85,7 +85,7 @@ export default function Index({
             href={route("requests.create")}
             className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
           >
-            Apply now
+            Apply for voter
           </Link>
         </div>
       }
@@ -191,14 +191,14 @@ export default function Index({
                           key={request.id}
                         >
                           <td className="px-3 py-2">{request.id}</td>
-                          <td className="px-3 py-2 text-blue-600 hover:text-blue-800 underline">
+                          <th className="px-3 py-2 hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800">
                             <Link
                               href={route("requests.show", request)}
                               title="View Details"
                             >
                               {REQUEST_TYPE_TEXT_MAP[request.type]}
                             </Link>
-                          </td>
+                          </th>
                           <td className="px-3 py-2">
                             <span
                               className={

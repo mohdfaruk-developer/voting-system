@@ -23,13 +23,17 @@ class RequestResource extends JsonResource
             'type' => $this->type,
             'data' => array_merge(
                 $this->data,
-                ['aadhar_image_path' => $this->data['aadhar_image_path'] && ! (str_starts_with($this->data['aadhar_image_path'], 'http')) ?
-                    Storage::url($this->data['aadhar_image_path']) : $this->data['aadhar_image_path'],
+                ['aadhar_image_path' => isset($this->data['aadhar_image_path']) && ! (str_starts_with($this->data['aadhar_image_path'], 'http')) ?
+                    Storage::url($this->data['aadhar_image_path']) : $this->data['aadhar_image_path'] ?? null,
+                ],
+                ['candidate_image' => isset($this->data['candidate_image']) && ! (str_starts_with($this->data['candidate_image'], 'http')) ?
+                    Storage::url($this->data['candidate_image']) : $this->data['candidate_image'] ?? null,
                 ]
             ),
             'old_data' => $this->old_data,
             'status' => $this->status,
             'comment' => $this->comment,
+            'user_id' => $this->user_id,
             'lastUpdatedBy' => UserResource::make($this->whenLoaded('lastUpdatedBy')),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),

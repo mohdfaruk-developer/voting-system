@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Models\Candidate;
+use App\Models\Election;
 use App\Models\RequestModel;
 use App\Models\Voter;
 use App\Notifications\RequestApproved;
@@ -54,13 +56,32 @@ class RequestObserver
             // Send notification to the user
             Notification::send($requestModel->user, new RequestApproved($requestModel));
         } elseif (in_array($requestModel->type, [RequestModel::TYPE_NEW_CANDIDATE, RequestModel::TYPE_EXIST_CANDIDATE])) {
+            $election = Election::find($requestModel->data['election_id']);
+            if (! $election) {
+                throw new BadRequestHttpException('Election not found');
+            }
+            if ($election->end_on->isPast()) {
+                throw new BadRequestHttpException('Election has already ended');
+            }
+            if ($election->start_on->isPast()) {
+                throw new BadRequestHttpException('Election is ongoing');
+            }
             if ($requestModel->type === RequestModel::TYPE_NEW_CANDIDATE) {
                 // Create a new Candidate if request is of type new_candidate
+                $candidate = Candidate::create(array_merge([
+                    'user_id' => $requestModel->user_id,
+                ], $requestModel->data));
+
             } else {
                 // Update the existing Candidate if request is of type exist_candidate
+                $candidate = Candidate::with('election')->findOrFail($requestModel->data['candidate_id']);
+                // Update the candidate's details
+                $data = $requestModel->data;
+                unset($data['candidate_id']);
+                $candidate->update($data);
             }
             // Send notification to the user
-            // Notification::send($requestModel->user, new RequestApproved($requestModel));
+            Notification::send($requestModel->user, new RequestApproved($requestModel));
         }
     }
 }

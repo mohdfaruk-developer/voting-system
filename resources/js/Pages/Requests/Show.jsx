@@ -142,16 +142,22 @@ export default function Show({ auth, request, success, error }) {
                 )}
               </div>
               <div className="grid md:gap-1 md:grid-cols-2 mt-4">
-                <div>
-                  <label className="font-semibold text-base">Comment</label>
-                  <p className="mt-1">{request.comment || "NA"}</p>
-                </div>
+                {request.comment && (
+                  <div>
+                    <label className="font-semibold text-base">
+                      Rejection Reason
+                    </label>
+                    <p className="mt-1">{request.comment || "NA"}</p>
+                  </div>
+                )}
                 <div className="md:mt-0 mt-4 flex items-center">
                   <p
                     className="underline text-base text-blue-600 hover:cursor-pointer hover:text-blue-800"
                     onClick={confirmUserDeletion}
                   >
-                    View Aadhar Card
+                    {request.type.includes("voter")
+                      ? "View Aadhar Card"
+                      : "View Candidate Image"}
                   </p>
                 </div>
               </div>
@@ -198,11 +204,40 @@ export default function Show({ auth, request, success, error }) {
 
               <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <div className="p-6">
+                  {request.type.includes("voter") ? (
+                    <>
+                      <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Aadhar Card Image of request user for verification
+                      </h2>
+                      <p className="my-2 text-sm text-gray-600 dark:text-gray-400">
+                        This is the Aadhar card image of the voter user. Please
+                        verify the details before proceeding with any actions.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Candidate Image of request user for verification
+                      </h2>
+                      <p className="my-2 text-sm text-gray-600 dark:text-gray-400">
+                        This is the candidate image of the request user. Please
+                        verify the details before proceeding with any actions.
+                      </p>
+                    </>
+                  )}
                   <div>
                     <img
-                      src={request.data.aadhar_image_path}
-                      alt="Aadhar image"
-                      className="w-full h-[500px] object-contain"
+                      src={
+                        request.type.includes("voter")
+                          ? request.data.aadhar_image_path
+                          : request.data.candidate_image
+                      }
+                      alt={
+                        request.type.includes("voter")
+                          ? "Aadhar image"
+                          : "Candidate image"
+                      }
+                      className="w-full h-[300px] object-contain"
                     />
                   </div>
                   <div className="mt-6 flex justify-end">

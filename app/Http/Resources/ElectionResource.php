@@ -25,8 +25,9 @@ class ElectionResource extends JsonResource
             'election_start' => $this->start_on->format('Y-m-d H:i:s'),
             'election_end' => $this->end_on->format('Y-m-d H:i:s'),
             'lastUpdatedBy' => UserResource::make($this->whenLoaded('lastUpdatedBy')),
-            'total_vote' => $this->when($this->end_on->isPast(), fn () => $this->vote_count),
-            'candidates' => CandidateResource::collection($this->whenLoaded('candidates')),
+            'total_vote' => $this->when($this->end_on->isPast(), fn () => $this->votes_count ?? null),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

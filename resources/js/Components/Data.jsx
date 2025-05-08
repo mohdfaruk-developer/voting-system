@@ -3,8 +3,28 @@ export default function Data({ data }) {
     <div>
       {data.name && (
         <div>
-          <span className="font-medium text-base">Name:</span>
+          <span className="font-medium text-base">
+            {data.description ? "Candidate " : "Voter "}Name:
+          </span>
           <span className="mx-2 mt-1">{data.name}</span>
+        </div>
+      )}
+      {data.description && (
+        <div className="mt-2">
+          <span className="font-medium text-base">Candidate Bio:</span>
+          <span className="mx-2 mt-1">{data.description}</span>
+        </div>
+      )}
+      {data.qualification && (
+        <div className="mt-2">
+          <span className="font-medium text-base">Highest Qualification:</span>
+          <span className="mx-2 mt-1">{data.qualification}</span>
+        </div>
+      )}
+      {data.property && (
+        <div className="mt-2">
+          <span className="font-medium text-base">Property:</span>
+          <span className="mx-2 mt-1">{data.property} INR</span>
         </div>
       )}
       {data.date_of_birth && (

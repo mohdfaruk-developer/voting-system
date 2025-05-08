@@ -103,7 +103,7 @@ export default function Index({
                           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                           key={election.id}
                         >
-                          <th className="px-3 py-2 text-blue-600 hover:text-blue-800 hover:underline">
+                          <th className="px-3 py-3 hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800">
                             <Link
                               href={route("elections.show", election)}
                               title="View Details"
@@ -111,16 +111,16 @@ export default function Index({
                               {election.name}
                             </Link>
                           </th>
-                          <td className="px-3 py-2">{election.description}</td>
-                          <td className="px-3 py-2">{election.level}</td>
-                          <td className="px-3 py-2">{election.level_name}</td>
-                          <td className="px-3 py-2 text-nowrap">
+                          <td className="px-3 py-3">{election.description}</td>
+                          <td className="px-3 py-3">{election.level}</td>
+                          <td className="px-3 py-3">{election.level_name}</td>
+                          <td className="px-3 py-3 text-nowrap">
                             {election.election_start}
                           </td>
-                          <td className="px-3 py-2 text-nowrap">
+                          <td className="px-3 py-3 text-nowrap">
                             {election.election_end}
                           </td>
-                          <td className="px-3 py-2 text-nowrap">
+                          <td className="px-3 py-3 text-nowrap">
                             {election.lastUpdatedBy?.name || "NA"}
                           </td>
                         </tr>

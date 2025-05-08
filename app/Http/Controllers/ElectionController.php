@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreElectionRequest;
 use App\Http\Requests\UpdateElectionRequest;
+use App\Http\Resources\CandidateResource;
 use App\Http\Resources\ElectionResource;
+use App\Models\Candidate;
 use App\Models\Election;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -77,27 +79,20 @@ class ElectionController extends Controller
      */
     public function show(Election $election)
     {
-        $election->load(['lastUpdatedBy', 'candidates' => function ($query) use ($election) {
-            if ($election->end_on->isPast()) {
-                $query->withCount('votes');
-            }
-            if (request('search')) {
-                $query->whereAny(
-                    ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'],
-                    'like',
-                    '%' . request('search') . '%'
-                );
-            }
-            $query->oldest();
-        }]);
+        $query = Candidate::with('election')->where('election_id', $election->id);
+        if ($election->end_on->isPast()) {
+            $query->withCount('votes');
+        }
+        $candidates = $query->oldest()->paginate(15)->onEachSide(1);
 
+        $election->load('lastUpdatedBy');
         if ($election->end_on->isPast()) {
             $election->loadCount('votes');
         }
 
         return Inertia::render('Elections/Show', [
             'election' => ElectionResource::make($election),
-            'queryParams' => request()->query() ?: null,
+            'candidates' => CandidateResource::collection($candidates),
             'success' => session('success'),
             'error' => session('error'),
         ]);
@@ -119,6 +114,11 @@ class ElectionController extends Controller
             return redirect()->route('elections.show', $election)->with('error', 'Election is already ended.');
         }
 
+        if ($election->start_on->isPast()) {
+            // Check if the election is ongoing
+            return redirect()->route('elections.show', $election)->with('error', 'Election is ongoing.');
+        }
+
         return Inertia::render('Elections/Edit', [
             'election' => ElectionResource::make($election),
         ]);
@@ -138,6 +138,11 @@ class ElectionController extends Controller
         if ($election->end_on->isPast()) {
             // Check if the election is already ended
             return redirect()->route('elections.show', $election)->with('error', 'Election is already ended.');
+        }
+
+        if ($election->start_on->isPast()) {
+            // Check if the election is ongoing
+            return redirect()->route('elections.show', $election)->with('error', 'Election is ongoing.');
         }
 
         $election->update(array_merge(
@@ -164,6 +169,11 @@ class ElectionController extends Controller
         if ($election->end_on->isPast()) {
             // Check if the election is already ended
             return redirect()->route('elections.show', $election)->with('error', 'Election is already ended.');
+        }
+
+        if ($election->start_on->isPast()) {
+            // Check if the election is ongoing
+            return redirect()->route('elections.show', $election)->with('error', 'Election is ongoing.');
         }
 
         $election->delete();

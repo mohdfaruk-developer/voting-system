@@ -87,7 +87,7 @@ export default function Index({ voters, queryParams = null, success, error }) {
                           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                           key={voter.id}
                         >
-                          <th className="px-3 py-2 text-blue-600 hover:text-blue-800 hover:underline">
+                          <th className="px-3 py-3 hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800">
                             <Link
                               href={route("voters.show", voter)}
                               title="View Details"
@@ -95,8 +95,8 @@ export default function Index({ voters, queryParams = null, success, error }) {
                               {voter.voter_number}
                             </Link>
                           </th>
-                          <td className="px-3 py-2">{voter.name}</td>
-                          <td className="px-3 py-2">
+                          <td className="px-3 py-3">{voter.name}</td>
+                          <td className="px-3 py-3">
                             <span
                               className={
                                 "font-bold" +
@@ -108,13 +108,13 @@ export default function Index({ voters, queryParams = null, success, error }) {
                               {voter.status}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-nowrap">
+                          <td className="px-3 py-3 text-nowrap">
                             {voter.aadhar_number}
                           </td>
-                          <td className="px-3 py-2">
+                          <td className="px-3 py-3">
                             {voter.state} {voter.country}
                           </td>
-                          <td className="px-3 py-2 text-nowrap">
+                          <td className="px-3 py-3 text-nowrap">
                             {voter.created_at}
                           </td>
                         </tr>
