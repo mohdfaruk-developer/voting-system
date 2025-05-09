@@ -1,6 +1,7 @@
 import Pagination from "@/Components/Pagination";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
+import { dateformat } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import { useState } from "react";
@@ -75,6 +76,7 @@ export default function Index({
                       <th className="px-3 py-3">Level Name</th>
                       <th className="px-3 py-3">Start Date</th>
                       <th className="px-3 py-3">End Date</th>
+                      <th className="px-3 py-3">State</th>
                       <th className="px-3 py-3">Last Updated By</th>
                     </tr>
                   </thead>
@@ -115,10 +117,23 @@ export default function Index({
                           <td className="px-3 py-3">{election.level}</td>
                           <td className="px-3 py-3">{election.level_name}</td>
                           <td className="px-3 py-3 text-nowrap">
-                            {election.election_start}
+                            {dateformat(election.election_start)}
                           </td>
                           <td className="px-3 py-3 text-nowrap">
-                            {election.election_end}
+                            {dateformat(election.election_end)}
+                          </td>
+                          <td className="px-3 py-3 text-nowrap">
+                            <span
+                              className={
+                                election.state === "upcoming"
+                                  ? "text-green-600"
+                                  : election.state === "ongoing"
+                                  ? "text-yellow-600"
+                                  : "text-red-600"
+                              }
+                            >
+                              {election.state}
+                            </span>
                           </td>
                           <td className="px-3 py-3 text-nowrap">
                             {election.lastUpdatedBy?.name || "NA"}

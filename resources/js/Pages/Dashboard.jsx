@@ -1,8 +1,9 @@
+import ElectionCard from "@/Components/ElectionCard";
 import { VoterDetails } from "@/Components/VoterDetails";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Dashboard({ auth, voter }) {
+export default function Dashboard({ auth, voter, elections }) {
   const user = auth.user;
   return (
     <AuthenticatedLayout
@@ -21,8 +22,25 @@ export default function Dashboard({ auth, voter }) {
               {voter ? (
                 <VoterDetails voter={voter.data} />
               ) : (
-                <h1 className="text-xl font-bold">Hi, {user.name}! 👋</h1>
+                <div className="p-6">
+                  <h1 className="text-xl font-bold">Hi, {user.name}! 👋</h1>
+                  <p className="mt-2 text-gray-600">
+                    Welcome to the voting system. Please check your elections
+                    below.
+                  </p>
+                  <p className="mt-2 text-gray-600">
+                    Apply for voter card{" "}
+                    <a
+                      className="text-blue-800 hover:text-blue-600 hover:underline"
+                      href={route("requests.create")}
+                    >
+                      click here
+                    </a>
+                  </p>
+                  <p className="mt-2 text-gray-600">Happy voting! 🗳️</p>
+                </div>
               )}
+              <ElectionCard elections={elections ? elections.data : null} />
             </div>
           </div>
         </div>

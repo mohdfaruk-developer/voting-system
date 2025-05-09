@@ -1,6 +1,7 @@
 import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
+import { dateformat } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
@@ -115,7 +116,7 @@ export default function Index({ voters, queryParams = null, success, error }) {
                             {voter.state} {voter.country}
                           </td>
                           <td className="px-3 py-3 text-nowrap">
-                            {voter.created_at}
+                            {dateformat(voter.created_at)}
                           </td>
                         </tr>
                       ))}

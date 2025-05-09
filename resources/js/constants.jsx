@@ -16,3 +16,11 @@ export const REQUEST_TYPE_TEXT_MAP = {
   new_candidate: "New Candidate",
   exist_candidate: "Update Candidate",
 };
+
+export const dateformat = (date) => {
+  return (
+    new Date(date).toLocaleDateString() +
+    " " +
+    new Date(date).toLocaleTimeString()
+  );
+};

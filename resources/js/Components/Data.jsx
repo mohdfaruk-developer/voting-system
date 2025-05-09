@@ -24,7 +24,12 @@ export default function Data({ data }) {
       {data.property && (
         <div className="mt-2">
           <span className="font-medium text-base">Property:</span>
-          <span className="mx-2 mt-1">{data.property} INR</span>
+          <span className="mx-2 mt-1">
+            {new Intl.NumberFormat("en-IN", {
+              style: "currency",
+              currency: "INR",
+            }).format(data.property)}
+          </span>
         </div>
       )}
       {data.date_of_birth && (

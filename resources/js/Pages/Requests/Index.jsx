@@ -2,6 +2,7 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {
+  dateformat,
   REQUEST_STATUS_CLASS_MAP,
   REQUEST_STATUS_TEXT_MAP,
   REQUEST_TYPE_TEXT_MAP,
@@ -210,7 +211,7 @@ export default function Index({
                             </span>
                           </td>
                           <td className="px-3 py-2 text-nowrap">
-                            {request.created_at}
+                            {dateformat(request.created_at)}
                           </td>
                           <td className="px-3 py-2">
                             {request.lastUpdatedBy?.name}

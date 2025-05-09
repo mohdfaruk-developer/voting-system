@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router } from "@inertiajs/react";
 import {
+  dateformat,
   REQUEST_STATUS_CLASS_MAP,
   REQUEST_STATUS_TEXT_MAP,
   REQUEST_TYPE_TEXT_MAP,
@@ -108,13 +109,13 @@ export default function Show({ auth, request, success, error }) {
                     <label className="font-semibold text-base">
                       Create Date
                     </label>
-                    <p className="mt-1">{request.created_at}</p>
+                    <p className="mt-1">{dateformat(request.created_at)}</p>
                   </div>
                   <div className="mt-4">
                     <label className="font-semibold text-base">
                       Last Update Date
                     </label>
-                    <p className="mt-1">{request.updated_at}</p>
+                    <p className="mt-1">{dateformat(request.updated_at)}</p>
                   </div>
                   <div className="mt-4">
                     <label className="font-semibold text-base">

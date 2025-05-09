@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 
 export function VoterDetails({ voter }) {
   return (
-    <div className="p-5">
+    <div className="p-6">
       <div className="grid grid-cols-2 px-3 md:px-0">
         <div className="flex items-center">
           <h1 className="text-xl font-semibold">Voter Details</h1>

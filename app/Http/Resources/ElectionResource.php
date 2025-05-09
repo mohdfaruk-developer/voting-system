@@ -20,6 +20,7 @@ class ElectionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'state' => $this->start_on->isFuture() ? 'upcoming' : ($this->end_on->isFuture() ? 'ongoing' : 'ended'),
             'level' => $this->level,
             'level_name' => $this->level_name,
             'election_start' => $this->start_on->format('Y-m-d H:i:s'),

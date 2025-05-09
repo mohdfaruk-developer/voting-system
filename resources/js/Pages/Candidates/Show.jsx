@@ -72,7 +72,12 @@ export default function Show({ auth, candidate, success, error }) {
 
                   <div>
                     <h3 className="font-bold text-lg">Declared Property</h3>
-                    <p>{candidateData.property} INR</p>
+                    <p>
+                      {new Intl.NumberFormat("en-IN", {
+                        style: "currency",
+                        currency: "INR",
+                      }).format(candidateData.property)}
+                    </p>
                   </div>
 
                   <div>
