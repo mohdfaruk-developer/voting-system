@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class VoterController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the voter.
      */
     public function index(Request $request)
     {
@@ -43,7 +43,7 @@ class VoterController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified voter.
      */
     public function show(Voter $voter)
     {

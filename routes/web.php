@@ -25,17 +25,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Request routes
+    // Requests routes
     Route::resource('requests', RequestController::class)->except('edit');
 
-    // Voter rotes
+    // Voters routes
     Route::resource('voters', VoterController::class)->only(['index', 'show']);
 
-    // Elections rotes
+    // Elections routes
     Route::resource('elections', ElectionController::class);
 
-    Route::resource('elections/{election}/requests', CandidateRequestController::class)->only(['create', 'store'])->names('candidate-request');
+    // Candidates routes
+    Route::resource('elections/{election}/requests', CandidateRequestController::class)
+        ->only(['create', 'store'])->names('candidate-request');
     Route::resource('elections/{election}/candidates', CandidateController::class)->only(['show', 'destroy']);
+
+    // Vote routes
+    Route::get('elections/{election}/vote', [\App\Http\Controllers\VoteController::class, 'create'])
+        ->name('vote.create');
+    Route::post('elections/{election}/vote', [\App\Http\Controllers\VoteController::class, 'store'])
+        ->middleware('password.confirm')->name('vote.store');
 });
 
 require __DIR__ . '/auth.php';

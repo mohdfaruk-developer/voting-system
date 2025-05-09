@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
-            $table->foreignId('country_id')->constrained()->onDelete('cascade');
+            $table->foreignId('country_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique(['name', 'country_id']);

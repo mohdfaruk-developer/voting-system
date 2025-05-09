@@ -15,7 +15,7 @@ return new class() extends Migration
     {
         Schema::create('voters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('voter_number')->unique();
             $table->string('name');
             $table->timestamp('date_of_birth');

@@ -12,7 +12,7 @@ use Inertia\Inertia;
 class CandidateController extends Controller
 {
     /**
-     * Display the specified resource.
+     * Display the specified candidate.
      */
     public function show(Election $election, Candidate $candidate)
     {
@@ -26,7 +26,7 @@ class CandidateController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified candidate from storage.
      */
     public function destroy(Election $election, Candidate $candidate)
     {

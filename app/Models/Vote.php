@@ -21,7 +21,6 @@ class Vote extends Model
         'election_id',
         'candidate_id',
         'voter_id',
-        'last_updated_by',
     ];
 
     /**
@@ -46,13 +45,5 @@ class Vote extends Model
     public function voter(): BelongsTo
     {
         return $this->belongsTo(Voter::class);
-    }
-
-    /**
-     * Get last updated by user
-     */
-    public function lastUpdatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'last_updated_by');
     }
 }
