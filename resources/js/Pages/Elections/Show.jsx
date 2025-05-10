@@ -14,6 +14,16 @@ export default function Show({ auth, election, candidates, success, error }) {
     router.delete(route("elections.destroy", election));
   };
 
+  const getWinnerCandidate = (candidates) => {
+    let winner = candidates[0];
+    candidates.forEach((candidate) => {
+      if (candidate.vote_count > winner.vote_count) {
+        winner = candidate;
+      }
+    });
+    return winner;
+  };
+
   return (
     <AuthenticatedLayout
       header={
@@ -110,52 +120,72 @@ export default function Show({ auth, election, candidates, success, error }) {
                     </dd>
                   </div>
                 </dl>
-                {"total_vote" in electionData && (
-                  <dl>
-                    <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
-                      <dt className="text-base font-medium leading-6 capitalize">
-                        Total Votes Received
-                      </dt>
-                      <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                        <span>{electionData.total_vote}</span>
-                      </dd>
-                    </div>
-                  </dl>
+                {electionData.state === "ended" && (
+                  <>
+                    <dl>
+                      <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
+                        <dt className="text-base font-medium leading-6 capitalize">
+                          Total Votes Received
+                        </dt>
+                        <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
+                          <span>{electionData.total_vote}</span>
+                        </dd>
+                      </div>
+                    </dl>
+                    <dl>
+                      <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
+                        <dt className="text-base font-medium leading-6 capitalize">
+                          Winner Candidate
+                        </dt>
+                        <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
+                          <a
+                            className="hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800 font-semibold"
+                            href={route("candidates.show", [
+                              electionData.id,
+                              getWinnerCandidate(candidates.data).id,
+                            ])}
+                          >
+                            {getWinnerCandidate(candidates.data).name}
+                          </a>
+                        </dd>
+                      </div>
+                    </dl>
+                  </>
                 )}
-                {user.is_admin ? (
-                  <div className="pt-6 text-right">
+                <div className="pt-6 text-right">
+                  {electionData.state === "ongoing" && (
                     <Link
-                      href={route("elections.edit", electionData)}
-                      className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
+                      href={route("votes.create", electionData)}
+                      className="mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                     >
-                      Update Election
+                      Voting
                     </Link>
-                    <DangerButton
-                      className="ml-4"
-                      onClick={(e) => deleteElection(electionData)}
-                      disabled={electionData.total_vote > 0}
-                    >
-                      Delete Election
-                    </DangerButton>
-                  </div>
-                ) : (
-                  <div className="pt-6 text-right">
-                    {electionData.state === "ongoing" && (
+                  )}
+                  {user.is_admin && (
+                    <>
                       <Link
-                        href={route("candidate-request.create", electionData)}
-                        className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
+                        href={route("elections.edit", electionData)}
+                        className="mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                       >
-                        Voting
+                        Update Election
                       </Link>
-                    )}
+                      <DangerButton
+                        onClick={(e) => deleteElection(electionData)}
+                        disabled={electionData.state !== "upcoming"}
+                      >
+                        Delete Election
+                      </DangerButton>
+                    </>
+                  )}
+                  {!user.is_admin && (
                     <Link
                       href={route("candidate-request.create", electionData)}
                       className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                     >
                       Apply nomination
                     </Link>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>

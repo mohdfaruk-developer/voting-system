@@ -50,11 +50,7 @@ export default function Create({ auth, candidate }) {
       // Fetch states when country changes using async/await
       const fetchStates = async () => {
         try {
-          const response = await fetch(
-            route("states", {
-              country: data.country,
-            })
-          );
+          const response = await fetch(route("states", data.country));
           const stateData = await response.json();
           setStates(stateData.data);
         } catch (error) {
@@ -69,7 +65,7 @@ export default function Create({ auth, candidate }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    post(route("candidate-request.store", { election: electionId }));
+    post(route("candidate-request.store", electionId));
   };
 
   return (

@@ -16,7 +16,7 @@ class CandidateController extends Controller
      */
     public function show(Election $election, Candidate $candidate)
     {
-        $candidate->load('election')->loadCount('votes');
+        $candidate->load(['election' => fn ($q) => $q->withCount('votes')])->loadCount('votes');
 
         return Inertia::render('Candidates/Show', [
             'candidate' => CandidateResource::make($candidate),

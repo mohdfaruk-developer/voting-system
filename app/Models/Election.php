@@ -22,7 +22,7 @@ class Election extends Model
 
     public const LEVEL_CITY = 'city';
 
-    public const LEVEL_LOCAL = 'other';
+    public const LEVEL_OTHER = 'other';
 
     /**
      * All available election levels
@@ -31,7 +31,7 @@ class Election extends Model
         self::LEVEL_COUNTRY,
         self::LEVEL_STATE,
         self::LEVEL_CITY,
-        self::LEVEL_LOCAL,
+        self::LEVEL_OTHER,
     ];
 
     /**

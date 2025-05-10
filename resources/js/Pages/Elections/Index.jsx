@@ -122,7 +122,7 @@ export default function Index({
                           <td className="px-3 py-3 text-nowrap">
                             {dateformat(election.election_end)}
                           </td>
-                          <td className="px-3 py-3 text-nowrap">
+                          <th className="px-3 py-3 text-nowrap">
                             <span
                               className={
                                 election.state === "upcoming"
@@ -134,7 +134,7 @@ export default function Index({
                             >
                               {election.state}
                             </span>
-                          </td>
+                          </th>
                           <td className="px-3 py-3 text-nowrap">
                             {election.lastUpdatedBy?.name || "NA"}
                           </td>

@@ -10,10 +10,7 @@ export default function Show({ auth, candidate, success, error }) {
   const deleteCandidate = () => {
     if (window.confirm("Are you sure you want to delete this candidate?")) {
       router.delete(
-        route("candidates.destroy", {
-          election: candidateData.election_id,
-          candidate: candidateData.id,
-        })
+        route("candidates.destroy", [candidateData.election_id, candidateData])
       );
     }
   };
@@ -89,12 +86,14 @@ export default function Show({ auth, candidate, success, error }) {
                     </p>
                   </div>
 
-                  {"total_vote" in candidateData && (
+                  {election.state === "ended" && (
                     <div>
                       <h3 className="font-bold text-lg">
                         Total Votes Received
                       </h3>
-                      <p>{candidateData.total_vote} votes</p>
+                      <p>
+                        {candidateData.total_vote}/{election.total_vote} votes
+                      </p>
                     </div>
                   )}
 
@@ -102,9 +101,10 @@ export default function Show({ auth, candidate, success, error }) {
                     <div className="mt-4 flex justify-end">
                       <Link
                         href={
-                          route("candidate-request.create", {
-                            election: candidateData.election_id,
-                          }) + `?candidate_id=${candidateData.id}`
+                          route(
+                            "candidate-request.create",
+                            candidateData.election_id
+                          ) + `?candidate_id=${candidateData.id}`
                         }
                         className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                       >

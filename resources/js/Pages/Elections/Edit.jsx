@@ -43,11 +43,7 @@ export default function Edit({ election }) {
       // Fetch states when country changes using async/await
       const fetchStates = async () => {
         try {
-          const response = await fetch(
-            route("states", {
-              country: data.country,
-            })
-          );
+          const response = await fetch(route("states", data.country));
           const stateData = await response.json();
           setStates(stateData.data);
         } catch (error) {

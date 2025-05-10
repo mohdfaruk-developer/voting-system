@@ -14,6 +14,7 @@ export default function CandidateTable({ candidates }) {
               <th className="px-3 py-3">description</th>
               <th className="px-3 py-3">qualification</th>
               <th className="px-3 py-3">country</th>
+              <th className="px-3 py-3">Received Votes</th>
             </tr>
           </thead>
           {candidates.data.length ? (
@@ -27,15 +28,15 @@ export default function CandidateTable({ candidates }) {
                   <td className="px-3 py-2">
                     <img
                       src={candidate.candidate_image}
-                      style={{ width: 60 }}
+                      className="w-28 h-28 rounded-full object-cover"
                     />
                   </td>
                   <th className="px-3 py-2 hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800">
                     <Link
-                      href={route("candidates.show", {
-                        election: candidate.election_id,
-                        candidate: candidate,
-                      })}
+                      href={route("candidates.show", [
+                        candidate.election_id,
+                        candidate,
+                      ])}
                     >
                       {candidate.name}
                     </Link>
@@ -45,6 +46,11 @@ export default function CandidateTable({ candidates }) {
                     {candidate.qualification}
                   </td>
                   <td className="px-3 py-2 text-nowrap">{candidate.country}</td>
+                  <td className="px-3 py-2 text-nowrap">
+                    {candidate.election.state === "ended"
+                      ? `${candidate.total_vote} votes`
+                      : "N/A"}
+                  </td>
                 </tr>
               ))}
             </tbody>

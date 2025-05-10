@@ -80,15 +80,13 @@ class ElectionController extends Controller
     public function show(Election $election)
     {
         $query = Candidate::with('election')->where('election_id', $election->id);
-        if ($election->end_on->isPast()) {
-            $query->withCount('votes');
-        }
-        $candidates = $query->oldest()->paginate(15)->onEachSide(1);
-
         $election->load('lastUpdatedBy');
         if ($election->end_on->isPast()) {
+            $query->withCount('votes');
             $election->loadCount('votes');
         }
+        // dd($election, $query->get());
+        $candidates = $query->oldest()->paginate(15)->onEachSide(1);
 
         return Inertia::render('Elections/Show', [
             'election' => ElectionResource::make($election),
