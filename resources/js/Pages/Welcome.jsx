@@ -47,6 +47,62 @@ export default function Welcome({ auth }) {
                 )}
               </nav>
             </header>
+            <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+              <h1 className="text-2xl font-bold text-center">
+                🗳️ Online Voting System
+              </h1>
+
+              {/* Hero Section */}
+              <section className="text-center py-20 px-6">
+                <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                  Secure, Transparent & Fast Voting
+                </h2>
+                <p className="mt-4 text-lg max-w-xl mx-auto text-gray-600 dark:text-gray-300">
+                  Cast your vote from anywhere in a matter of seconds. No more
+                  long queues or paper ballots.
+                </p>
+              </section>
+
+              {/* Features */}
+              <section className="py-16 px-6 bg-gray-50 dark:bg-gray-800">
+                <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center">
+                  {[
+                    {
+                      title: "Secure & Transparent",
+                      description:
+                        "All votes are encrypted and stored immutably, ensuring the integrity and transparency of the election process.",
+                    },
+                    {
+                      title: "User Friendly",
+                      description:
+                        "Simple and intuitive interface for all voters.",
+                    },
+                    {
+                      title: "Instant Results",
+                      description:
+                        "Get real-time election results immediately after voting ends—no delays, no manual counting.",
+                    },
+                  ].map((feature, idx) => (
+                    <div
+                      key={idx}
+                      className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-200 dark:border-gray-700"
+                    >
+                      <h3 className="text-xl font-semibold mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {feature.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Footer */}
+              <footer className="text-center text-sm py-6 text-gray-500 dark:text-gray-400">
+                © 2025 Online Voting System. All rights reserved.
+              </footer>
+            </div>
           </div>
         </div>
       </div>
