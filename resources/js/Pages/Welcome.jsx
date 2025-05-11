@@ -47,7 +47,7 @@ export default function Welcome({ auth }) {
                 )}
               </nav>
             </header>
-            <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+            <div className="p-6 text-gray-800 dark:text-white transition-colors duration-300">
               <h1 className="text-2xl font-bold text-center">
                 🗳️ Online Voting System
               </h1>
@@ -64,7 +64,7 @@ export default function Welcome({ auth }) {
               </section>
 
               {/* Features */}
-              <section className="py-16 px-6 bg-gray-50 dark:bg-gray-800">
+              <section className="py-6 px-6 md:py-16">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center">
                   {[
                     {
@@ -85,7 +85,7 @@ export default function Welcome({ auth }) {
                   ].map((feature, idx) => (
                     <div
                       key={idx}
-                      className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-200 dark:border-gray-700"
+                      className="p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700"
                     >
                       <h3 className="text-xl font-semibold mb-2">
                         {feature.title}

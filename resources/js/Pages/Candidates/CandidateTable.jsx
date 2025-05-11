@@ -6,7 +6,7 @@ export default function CandidateTable({ candidates }) {
     <>
       <div className="overflow-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+          <thead className="text-xs text-gray-700 uppercase dark:text-gray-400 border-b-2 border-gray-500">
             <tr className="text-nowrap">
               <th className="px-3 py-3">ID</th>
               <th className="px-3 py-3">Image</th>
@@ -28,7 +28,7 @@ export default function CandidateTable({ candidates }) {
                   <td className="px-3 py-2">
                     <img
                       src={candidate.candidate_image}
-                      className="w-28 h-28 rounded-full object-cover"
+                      className="w-11 h-11 md:w-28 md:h-28 rounded-full object-cover"
                     />
                   </td>
                   <th className="px-3 py-2 hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800">

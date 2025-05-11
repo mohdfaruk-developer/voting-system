@@ -132,24 +132,26 @@ export default function Show({ auth, election, candidates, success, error }) {
                         </dd>
                       </div>
                     </dl>
-                    <dl>
-                      <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
-                        <dt className="text-base font-medium leading-6 capitalize">
-                          Winner Candidate
-                        </dt>
-                        <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                          <a
-                            className="hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800 font-semibold"
-                            href={route("candidates.show", [
-                              electionData.id,
-                              getWinnerCandidate(candidates.data).id,
-                            ])}
-                          >
-                            {getWinnerCandidate(candidates.data).name}
-                          </a>
-                        </dd>
-                      </div>
-                    </dl>
+                    {getWinnerCandidate(candidates.data) && (
+                      <dl>
+                        <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
+                          <dt className="text-base font-medium leading-6 capitalize">
+                            Winner Candidate
+                          </dt>
+                          <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
+                            <a
+                              className="hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800 font-semibold"
+                              href={route("candidates.show", [
+                                electionData.id,
+                                getWinnerCandidate(candidates.data).id,
+                              ])}
+                            >
+                              {getWinnerCandidate(candidates.data).name}
+                            </a>
+                          </dd>
+                        </div>
+                      </dl>
+                    )}
                   </>
                 )}
                 <div className="pt-6 text-right">
