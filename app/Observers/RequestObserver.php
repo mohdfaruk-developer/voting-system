@@ -33,6 +33,9 @@ class RequestObserver
 
         if (in_array($requestModel->type, [RequestModel::TYPE_NEW_VOTER, RequestModel::TYPE_EXIST_VOTER])) {
             if ($requestModel->type === RequestModel::TYPE_NEW_VOTER) {
+                if (Voter::where(['user_id' => $requestModel->user_id, 'active' => true])->exists()) {
+                    throw new BadRequestHttpException('User already has a voter');
+                }
                 // Create a new voter if the request is of type new_voter
                 $voter = Voter::create(array_merge([
                     'user_id' => $requestModel->user_id,
@@ -65,6 +68,9 @@ class RequestObserver
             }
             if ($election->start_on->isPast()) {
                 throw new BadRequestHttpException('Election is ongoing');
+            }
+            if ($election->candidates()->where('user_id', $requestModel->user_id)->exists()) {
+                throw new BadRequestHttpException('User already has a candidate');
             }
             if ($requestModel->type === RequestModel::TYPE_NEW_CANDIDATE) {
                 // Create a new Candidate if request is of type new_candidate

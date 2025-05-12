@@ -1,6 +1,6 @@
 export default function ApplicationLogo(props) {
   return (
-    <div className="flex items-center space-x-3 rounded-2xl">
+    <div className="flex items-center space-x-3 rounded-2xl text-gray-900 dark:text-gray-100">
       <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
