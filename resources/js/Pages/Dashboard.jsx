@@ -1,7 +1,7 @@
 import ElectionCard from "@/Components/ElectionCard";
 import { VoterDetails } from "@/Components/VoterDetails";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 
 export default function Dashboard({ auth, voter, elections }) {
   const user = auth.user;
@@ -30,12 +30,12 @@ export default function Dashboard({ auth, voter, elections }) {
                   </p>
                   <p className="mt-2 text-gray-600">
                     Apply for voter card{" "}
-                    <a
+                    <Link
                       className="text-blue-800 hover:text-blue-600 hover:underline"
                       href={route("requests.create")}
                     >
                       click here
-                    </a>
+                    </Link>
                   </p>
                   <p className="mt-2 text-gray-600">Happy voting! 🗳️</p>
                 </div>

@@ -139,7 +139,7 @@ export default function Show({ auth, election, candidates, success, error }) {
                             Winner Candidate
                           </dt>
                           <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                            <a
+                            <Link
                               className="hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800 font-semibold"
                               href={route("candidates.show", [
                                 electionData.id,
@@ -147,7 +147,7 @@ export default function Show({ auth, election, candidates, success, error }) {
                               ])}
                             >
                               {getWinnerCandidate(candidates.data).name}
-                            </a>
+                            </Link>
                           </dd>
                         </div>
                       </dl>
