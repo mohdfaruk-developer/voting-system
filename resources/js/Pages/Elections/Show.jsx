@@ -108,7 +108,9 @@ export default function Show({ auth, election, candidates, success, error }) {
                       Election Start
                     </dt>
                     <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                      <span>{dateformat(electionData.election_start)}</span>
+                      <span className="text-nowrap">
+                        {dateformat(electionData.election_start)}
+                      </span>
                     </dd>
                   </div>
                 </dl>
@@ -118,7 +120,9 @@ export default function Show({ auth, election, candidates, success, error }) {
                       Election End
                     </dt>
                     <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                      <span>{dateformat(electionData.election_end)}</span>
+                      <span className="text-nowrap">
+                        {dateformat(electionData.election_end)}
+                      </span>
                     </dd>
                   </div>
                 </dl>

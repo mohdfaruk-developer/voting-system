@@ -19,8 +19,16 @@ export const REQUEST_TYPE_TEXT_MAP = {
 
 export const dateformat = (date) => {
   return (
-    new Date(date).toLocaleDateString() +
+    new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }) +
     " " +
-    new Date(date).toLocaleTimeString()
+    new Date(date).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    })
   );
 };

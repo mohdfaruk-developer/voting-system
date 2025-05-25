@@ -110,13 +110,17 @@ export default function Show({ auth, request, success, error }) {
                       <label className="font-semibold text-base">
                         Create Date
                       </label>
-                      <p className="mt-1">{dateformat(request.created_at)}</p>
+                      <p className="mt-1 text-nowrap">
+                        {dateformat(request.created_at)}
+                      </p>
                     </div>
                     <div className="mt-4">
                       <label className="font-semibold text-base">
                         Last Update Date
                       </label>
-                      <p className="mt-1">{dateformat(request.updated_at)}</p>
+                      <p className="mt-1 text-nowrap">
+                        {dateformat(request.updated_at)}
+                      </p>
                     </div>
                     <div className="mt-4">
                       <label className="font-semibold text-base">

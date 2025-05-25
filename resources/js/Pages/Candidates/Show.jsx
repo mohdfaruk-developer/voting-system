@@ -42,7 +42,7 @@ export default function Show({ auth, candidate, success, error }) {
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Candidate Image */}
-              <div className="p-6 flex justify-center items-center bg-gray-100 dark:bg-gray-700">
+              <div className="p-4 sm:p-8 flex justify-center items-center bg-gray-100 dark:bg-gray-700">
                 <img
                   src={candidateData.candidate_image}
                   alt={`Candidate ${candidateData.name}`}
@@ -51,7 +51,7 @@ export default function Show({ auth, candidate, success, error }) {
               </div>
 
               {/* Candidate Info */}
-              <div className="p-6 text-gray-900 dark:text-gray-100">
+              <div className="p-4 sm:p-8 text-gray-900 dark:text-gray-100">
                 <div className="space-y-4">
                   <div>
                     <h3 className="font-bold text-lg">Candidate Name</h3>
@@ -124,7 +124,7 @@ export default function Show({ auth, candidate, success, error }) {
             </div>
 
             {/* Election Info */}
-            <div className="p-6 border-t text-gray-900 dark:text-gray-100">
+            <div className="p-4 sm:p-8 border-t text-gray-900 dark:text-gray-100">
               <h3 className="font-bold text-lg mb-4">Election Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -137,11 +137,15 @@ export default function Show({ auth, candidate, success, error }) {
                 </div>
                 <div>
                   <h4 className="font-semibold">Election Start</h4>
-                  <p>{dateformat(election.election_start)}</p>
+                  <p className="text-nowrap">
+                    {dateformat(election.election_start)}
+                  </p>
                 </div>
                 <div>
                   <h4 className="font-semibold">Election End</h4>
-                  <p>{dateformat(election.election_end)}</p>
+                  <p className="text-nowrap">
+                    {dateformat(election.election_end)}
+                  </p>
                 </div>
               </div>
             </div>

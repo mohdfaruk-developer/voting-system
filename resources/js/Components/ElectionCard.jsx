@@ -34,13 +34,17 @@ export default function ElectionCard({ elections }) {
               <span className="font-medium text-gray-700 dark:text-gray-300">
                 Start:
               </span>{" "}
-              {dateformat(election.election_start)}
+              <span className="text-nowrap">
+                {dateformat(election.election_start)}
+              </span>
             </p>
             <p>
               <span className="font-medium text-gray-700 dark:text-gray-300">
                 End:
               </span>{" "}
-              {dateformat(election.election_end)}
+              <span className="text-nowrap">
+                {dateformat(election.election_end)}
+              </span>
             </p>
             <p>
               <span className="font-medium text-gray-700 dark:text-gray-300">
