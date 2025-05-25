@@ -29,8 +29,8 @@ export default function Show({ voter }) {
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="p-5">
+            <div className="text-gray-900 dark:text-gray-100 p-4 sm:p-8">
+              <div>
                 <dl>
                   <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
                     <dt className="text-base font-medium leading-6 capitalize">
@@ -107,8 +107,9 @@ export default function Show({ voter }) {
                     </dt>
                     <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
                       <span>
-                        {voterData.address} {voterData.city} {voterData.state}{" "}
-                        {voterData.pin_code} ({voterData.country})
+                        {voterData.address} {voterData.city}{" "}
+                        {voterData.pin_code} {voterData.state}{" "}
+                        {voterData.country}
                       </span>
                     </dd>
                   </div>

@@ -8,7 +8,7 @@ export default function Welcome({ auth }) {
         <div className="relative flex min-h-screen flex-col items-center">
           <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
             <header className="grid grid-cols-2 items-center gap-2 py-10">
-              <div className="flex lg:start">
+              <nav className="flex -mx-3">
                 <div className="flex items-center space-x-3 rounded-2xl">
                   <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
                     <svg
@@ -18,10 +18,10 @@ export default function Welcome({ auth }) {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                     >
                       <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                       <path d="m9 11 3 3L22 4" />
@@ -36,8 +36,8 @@ export default function Welcome({ auth }) {
                     </p>
                   </div>
                 </div>
-              </div>
-              <nav className="-mx-3 flex flex-1 justify-end">
+              </nav>
+              <nav className="-mx-3 flex justify-end">
                 {auth.user ? (
                   <Link
                     href={route("dashboard")}
@@ -69,7 +69,7 @@ export default function Welcome({ auth }) {
               </h1>
 
               {/* Hero Section */}
-              <section className="text-center py-20 px-6">
+              <section className="text-center py-10 md:py-20">
                 <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
                   Secure, Transparent & Fast Voting
                 </h2>
@@ -80,7 +80,7 @@ export default function Welcome({ auth }) {
               </section>
 
               {/* Features */}
-              <section className="py-6 px-6 md:py-16">
+              <section className="py-6 md:py-16">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center">
                   {[
                     {
@@ -96,7 +96,7 @@ export default function Welcome({ auth }) {
                     {
                       title: "Instant Results",
                       description:
-                        "Get real-time election results immediately after voting ends—no delays, no manual counting.",
+                        "Get real-time election results immediately after voting ends no delays, no manual counting.",
                     },
                   ].map((feature, idx) => (
                     <div

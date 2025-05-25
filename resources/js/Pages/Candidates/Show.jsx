@@ -1,4 +1,5 @@
 import DangerButton from "@/Components/DangerButton";
+import { dateformat } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 
@@ -27,7 +28,7 @@ export default function Show({ auth, candidate, success, error }) {
       <Head title={`Candidate ${candidateData.name}`} />
 
       <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           {success && (
             <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
               {success}
@@ -38,7 +39,7 @@ export default function Show({ auth, candidate, success, error }) {
               {error}
             </div>
           )}
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+          <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Candidate Image */}
               <div className="p-6 flex justify-center items-center bg-gray-100 dark:bg-gray-700">
@@ -80,8 +81,8 @@ export default function Show({ auth, candidate, success, error }) {
                   <div>
                     <h3 className="font-bold text-lg">Address</h3>
                     <p>
-                      {candidateData.address}, {candidateData.city},{" "}
-                      {candidateData.pin_code}, {candidateData.state},{" "}
+                      {candidateData.address} {candidateData.city}{" "}
+                      {candidateData.pin_code} {candidateData.state}{" "}
                       {candidateData.country}
                     </p>
                   </div>
@@ -136,11 +137,11 @@ export default function Show({ auth, candidate, success, error }) {
                 </div>
                 <div>
                   <h4 className="font-semibold">Election Start</h4>
-                  <p>{election.election_start}</p>
+                  <p>{dateformat(election.election_start)}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold">Election End</h4>
-                  <p>{election.election_end}</p>
+                  <p>{dateformat(election.election_end)}</p>
                 </div>
               </div>
             </div>

@@ -89,7 +89,7 @@ export default function Create() {
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <form
               onSubmit={onSubmit}
-              className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
+              className="text-gray-900 dark:text-gray-100 p-4 sm:p-8"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
                 <div className="mt-4">

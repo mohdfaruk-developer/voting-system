@@ -2,6 +2,7 @@ import DangerButton from "@/Components/DangerButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import CandidateTable from "../Candidates/CandidateTable";
+import { dateformat } from "@/constants";
 
 export default function Show({ auth, election, candidates, success, error }) {
   const electionData = election.data;
@@ -15,14 +16,22 @@ export default function Show({ auth, election, candidates, success, error }) {
   };
 
   const getWinnerCandidate = (candidates) => {
+    if (candidates.length === 1) {
+      return candidates[0]; // Only one candidate, they are the winner
+    }
     let winner = candidates[0];
     candidates.forEach((candidate) => {
-      if (candidate.vote_count > winner.vote_count) {
+      if (candidate.total_vote > winner.total_vote) {
         winner = candidate;
       }
     });
+    if (winner.total_vote == 0) {
+      return null; // No winner if no votes
+    }
     return winner;
   };
+
+  const winner = getWinnerCandidate(candidates.data);
 
   return (
     <AuthenticatedLayout
@@ -48,8 +57,8 @@ export default function Show({ auth, election, candidates, success, error }) {
             </div>
           )}
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="p-5">
+            <div className="text-gray-900 dark:text-gray-100 p-4 sm:p-8">
+              <div>
                 <dl>
                   <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
                     <dt className="text-base font-medium leading-6 capitalize">
@@ -96,7 +105,7 @@ export default function Show({ auth, election, candidates, success, error }) {
                       Election Start
                     </dt>
                     <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                      <span>{electionData.election_start}</span>
+                      <span>{dateformat(electionData.election_start)}</span>
                     </dd>
                   </div>
                 </dl>
@@ -106,7 +115,7 @@ export default function Show({ auth, election, candidates, success, error }) {
                       Election End
                     </dt>
                     <dd className="mt-1 text-base leading-6 col-span-2 text-end w-full sm:mt-0 flex justify-between">
-                      <span>{electionData.election_end}</span>
+                      <span>{dateformat(electionData.election_end)}</span>
                     </dd>
                   </div>
                 </dl>
@@ -132,7 +141,7 @@ export default function Show({ auth, election, candidates, success, error }) {
                         </dd>
                       </div>
                     </dl>
-                    {getWinnerCandidate(candidates.data) && (
+                    {winner && (
                       <dl>
                         <div className="px-3 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 border-b border-gray-300">
                           <dt className="text-base font-medium leading-6 capitalize">
@@ -143,10 +152,10 @@ export default function Show({ auth, election, candidates, success, error }) {
                               className="hover:underline text-blue-600 hover:cursor-pointer hover:text-blue-800 font-semibold"
                               href={route("candidates.show", [
                                 electionData.id,
-                                getWinnerCandidate(candidates.data).id,
+                                winner.id,
                               ])}
                             >
-                              {getWinnerCandidate(candidates.data).name}
+                              {winner.name}
                             </Link>
                           </dd>
                         </div>
@@ -158,28 +167,27 @@ export default function Show({ auth, election, candidates, success, error }) {
                   {electionData.state === "ongoing" && (
                     <Link
                       href={route("votes.create", electionData)}
-                      className="mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
+                      className="mr-2 md:mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                     >
                       Voting
                     </Link>
                   )}
-                  {user.is_admin && (
+                  {electionData.state === "upcoming" && user.is_admin && (
                     <>
                       <Link
                         href={route("elections.edit", electionData)}
-                        className="mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
+                        className="mr-2 md:mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                       >
                         Update Election
                       </Link>
                       <DangerButton
                         onClick={(e) => deleteElection(electionData)}
-                        disabled={electionData.state !== "upcoming"}
                       >
                         Delete Election
                       </DangerButton>
                     </>
                   )}
-                  {!user.is_admin && (
+                  {electionData.state === "upcoming" && !user.is_admin && (
                     <Link
                       href={route("candidate-request.create", electionData)}
                       className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
@@ -196,7 +204,7 @@ export default function Show({ auth, election, candidates, success, error }) {
       <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
+            <div className="text-gray-900 dark:text-gray-100 p-4 sm:p-8">
               <h2 className="my-2 text-lg font-medium text-gray-900 dark:text-gray-100">
                 All candidates witch participates in this election.
               </h2>

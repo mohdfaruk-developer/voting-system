@@ -1,3 +1,4 @@
+import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -82,7 +83,7 @@ export default function Create({ auth, voter }) {
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <form
               onSubmit={onSubmit}
-              className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
+              className="text-gray-900 dark:text-gray-100 p-4 sm:p-8"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
                 <div className="mt-4">
@@ -281,10 +282,8 @@ export default function Create({ auth, voter }) {
                         htmlFor="request_voter_alive"
                         value="Voter Alive"
                       />
-
-                      <TextInput
+                      <Checkbox
                         id="request_voter_alive"
-                        type="checkbox"
                         name="voter_alive"
                         checked={data.voter_alive}
                         className="mt-1"

@@ -160,7 +160,7 @@ class RequestController extends Controller
     public function destroy(RequestModel $request)
     {
         $user = request()->user();
-        if ($user->id !== $request->user_id) {
+        if (! ($user->is_admin || $user->id == $request->user_id)) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }

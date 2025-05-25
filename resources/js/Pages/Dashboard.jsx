@@ -18,11 +18,11 @@ export default function Dashboard({ auth, voter, elections }) {
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
+            <div className="text-gray-900 dark:text-gray-100 p-4 sm:p-8">
               {voter ? (
                 <VoterDetails voter={voter.data} />
               ) : (
-                <div className="p-6">
+                <div>
                   <h1 className="text-xl font-bold">Hi, {user.name}! 👋</h1>
                   <p className="mt-2 text-gray-600">
                     Welcome to the voting system. Please check your elections

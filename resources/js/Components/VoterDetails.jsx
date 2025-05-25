@@ -2,15 +2,15 @@ import { Link } from "@inertiajs/react";
 
 export function VoterDetails({ voter }) {
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-2 px-3 md:px-0">
+    <>
+      <div className="grid md:grid-cols-2 px-3 md:px-0">
         <div className="flex items-center">
           <h1 className="text-xl font-semibold">Voter Details</h1>
         </div>
-        <div className="text-end mt-0">
+        <div className="flex justify-between md:justify-end md:my-0 my-3">
           <Link
             href={route("voters.show", voter)}
-            className="mr-0 md:mr-5 mb-2 md:mb-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
+            className="md:mr-4 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
           >
             View details
           </Link>
@@ -81,6 +81,6 @@ export function VoterDetails({ voter }) {
           </dd>
         </div>
       </dl>
-    </div>
+    </>
   );
 }

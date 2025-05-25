@@ -31,7 +31,7 @@ class CandidateController extends Controller
     public function destroy(Election $election, Candidate $candidate)
     {
         $user = request()->user();
-        if ($user->is_admin || $candidate->user_id !== $user->id) {
+        if ($candidate->user_id !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
 
