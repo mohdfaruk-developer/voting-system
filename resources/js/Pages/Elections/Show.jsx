@@ -16,6 +16,9 @@ export default function Show({ auth, election, candidates, success, error }) {
   };
 
   const getWinnerCandidate = (candidates) => {
+    if (!candidates || candidates.length === 0) {
+      return null; // No candidates, no winner
+    }
     if (candidates.length === 1) {
       return candidates[0]; // Only one candidate, they are the winner
     }
@@ -25,7 +28,7 @@ export default function Show({ auth, election, candidates, success, error }) {
         winner = candidate;
       }
     });
-    if (winner.total_vote == 0) {
+    if (winner.total_vote === 0) {
       return null; // No winner if no votes
     }
     return winner;
