@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import {
   dateformat,
   REQUEST_STATUS_CLASS_MAP,
@@ -12,6 +12,7 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Show({ auth, request, success, error }) {
+  const { delete: destroy, processing } = useForm({});
   const user = auth.user;
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const confirmUserDeletion = () => {
@@ -45,7 +46,7 @@ export default function Show({ auth, request, success, error }) {
     if (!window.confirm("Are you sure you want to delete the request?")) {
       return;
     }
-    router.delete(route("requests.destroy", request));
+    destroy(route("requests.destroy", request));
   };
   return (
     <AuthenticatedLayout
@@ -175,24 +176,24 @@ export default function Show({ auth, request, success, error }) {
                   {user.is_admin && (
                     <>
                       <button
-                        disabled={request.status !== "pending"}
+                        disabled={request.status !== "pending" || processing}
                         onClick={(e) => approveRequest(request)}
                         className={
                           "mx-2 border border-green-500 text-green-600 hover:bg-green-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
-                          (request.status !== "pending"
-                            ? " cursor-not-allowed"
+                          (request.status !== "pending" || processing
+                            ? " cursor-not-allowed opacity-50"
                             : "")
                         }
                       >
                         Approve
                       </button>
                       <button
-                        disabled={request.status !== "pending"}
+                        disabled={request.status !== "pending" || processing}
                         onClick={(e) => rejectRequest(request)}
                         className={
                           "mx-2 border border-amber-500 text-amber-600 hover:bg-amber-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
-                          (request.status !== "pending"
-                            ? " cursor-not-allowed"
+                          (request.status !== "pending" || processing
+                            ? " cursor-not-allowed opacity-50"
                             : "")
                         }
                       >
@@ -201,12 +202,12 @@ export default function Show({ auth, request, success, error }) {
                     </>
                   )}
                   <button
-                    disabled={request.status !== "pending"}
+                    disabled={request.status !== "pending" || processing}
                     onClick={(e) => deleteRequest(request)}
                     className={
                       "mx-2 border border-red-500 text-red-600 hover:bg-red-50 py-2 px-5 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900/20 " +
-                      (request.status !== "pending"
-                        ? " cursor-not-allowed"
+                      (request.status !== "pending" || processing
+                        ? " cursor-not-allowed opacity-50"
                         : "")
                     }
                   >

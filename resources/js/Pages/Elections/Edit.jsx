@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function Edit({ election }) {
   const electionData = election.data;
-  const { data, setData, put, errors } = useForm({
+  const { data, setData, put, errors, processing } = useForm({
     name: electionData.name,
     description: electionData.description,
     level: electionData.level,
@@ -250,12 +250,17 @@ export default function Edit({ election }) {
 
               <div className="mt-6 text-right">
                 <Link
+                  onClick={(event) => {
+                    if (processing) {
+                      event.preventDefault();
+                    }
+                  }}
                   href={route("elections.index")}
                   className="mx-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 dark:focus:ring-offset-gray-800"
                 >
                   Cancel
                 </Link>
-                <PrimaryButton>Submit</PrimaryButton>
+                <PrimaryButton disabled={processing}>Submit</PrimaryButton>
               </div>
             </form>
           </div>

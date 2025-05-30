@@ -1,10 +1,11 @@
 import DangerButton from "@/Components/DangerButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import CandidateTable from "../Candidates/CandidateTable";
 import { dateformat } from "@/constants";
 
 export default function Show({ auth, election, candidates, success, error }) {
+  const { delete: destroy, processing } = useForm({});
   const electionData = election.data;
   const user = auth.user;
 
@@ -12,7 +13,7 @@ export default function Show({ auth, election, candidates, success, error }) {
     if (!confirm("Are you sure you want to delete the election?")) {
       return;
     }
-    router.delete(route("elections.destroy", election));
+    destroy(route("elections.destroy", election));
   };
 
   const getWinnerCandidate = (candidates) => {
@@ -182,12 +183,18 @@ export default function Show({ auth, election, candidates, success, error }) {
                   {electionData.state === "upcoming" && user.is_admin && (
                     <>
                       <Link
+                        onClick={(event) => {
+                          if (processing) {
+                            event.preventDefault();
+                          }
+                        }}
                         href={route("elections.edit", electionData)}
                         className="mr-2 md:mr-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-700 dark:hover:bg-white dark:focus:bg-white dark:focus:ring-offset-gray-800 dark:active:bg-gray-300"
                       >
                         Update Election
                       </Link>
                       <DangerButton
+                        disabled={processing}
                         onClick={(e) => deleteElection(electionData)}
                       >
                         Delete Election

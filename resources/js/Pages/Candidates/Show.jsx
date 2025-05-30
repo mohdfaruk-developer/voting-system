@@ -1,16 +1,17 @@
 import DangerButton from "@/Components/DangerButton";
 import { dateformat } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Show({ auth, candidate, success, error }) {
+  const { delete: destroy, processing } = useForm({});
   const user = auth.user;
   const election = candidate.data.election;
   const candidateData = candidate.data;
 
   const deleteCandidate = () => {
     if (window.confirm("Are you sure you want to delete this candidate?")) {
-      router.delete(
+      destroy(
         route("candidates.destroy", [candidateData.election_id, candidateData])
       );
     }
@@ -101,6 +102,11 @@ export default function Show({ auth, candidate, success, error }) {
                   {user.id === candidateData.user_id && (
                     <div className="mt-4 flex justify-end">
                       <Link
+                        onClick={(event) => {
+                          if (processing) {
+                            event.preventDefault();
+                          }
+                        }}
                         href={
                           route(
                             "candidate-request.create",
@@ -112,6 +118,7 @@ export default function Show({ auth, candidate, success, error }) {
                         Update request
                       </Link>
                       <DangerButton
+                        disabled={processing}
                         className="ml-4"
                         onClick={() => deleteCandidate()}
                       >

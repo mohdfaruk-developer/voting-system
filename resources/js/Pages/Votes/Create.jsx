@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { useForm } from "@inertiajs/react";
 
 export default function Create({ election, candidates }) {
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, processing } = useForm({
     candidate_id: "",
   });
 
@@ -58,6 +58,7 @@ export default function Create({ election, candidates }) {
                     {candidate.description}
                   </p>
                   <PrimaryButton
+                    disabled={processing}
                     className="mt-2"
                     onClick={() => handleVote(candidate)}
                   >

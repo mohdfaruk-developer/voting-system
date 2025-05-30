@@ -7,7 +7,7 @@ import {
   REQUEST_STATUS_TEXT_MAP,
   REQUEST_TYPE_TEXT_MAP,
 } from "@/constants.jsx";
-import { Head, Link, router, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 import SecondaryButton from "@/Components/SecondaryButton";
 
@@ -18,6 +18,7 @@ export default function Index({
   success,
   error,
 }) {
+  const { delete: destroy, processing } = useForm({});
   const user = auth.user;
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
@@ -68,7 +69,7 @@ export default function Index({
     if (!window.confirm("Are you sure you want to delete the request?")) {
       return;
     }
-    router.delete(route("requests.destroy", request));
+    destroy(route("requests.destroy", request));
   };
 
   const clearFilter = () => {
@@ -220,24 +221,28 @@ export default function Index({
                             {user.is_admin && (
                               <>
                                 <button
-                                  disabled={request.status !== "pending"}
+                                  disabled={
+                                    request.status !== "pending" || processing
+                                  }
                                   onClick={(e) => approveRequest(request)}
                                   className={
                                     "border border-green-500 text-green-600 hover:bg-green-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-900/20 " +
-                                    (request.status !== "pending"
-                                      ? " cursor-not-allowed"
+                                    (request.status !== "pending" || processing
+                                      ? " cursor-not-allowed opacity-50"
                                       : "")
                                   }
                                 >
                                   Approve
                                 </button>
                                 <button
-                                  disabled={request.status !== "pending"}
+                                  disabled={
+                                    request.status !== "pending" || processing
+                                  }
                                   onClick={(e) => rejectRequest(request)}
                                   className={
                                     "border border-amber-500 text-amber-600 hover:bg-amber-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20 " +
-                                    (request.status !== "pending"
-                                      ? " cursor-not-allowed"
+                                    (request.status !== "pending" || processing
+                                      ? " cursor-not-allowed opacity-50"
                                       : "")
                                   }
                                 >
@@ -246,12 +251,14 @@ export default function Index({
                               </>
                             )}
                             <button
-                              disabled={request.status !== "pending"}
+                              disabled={
+                                request.status !== "pending" || processing
+                              }
                               onClick={(e) => deleteRequest(request)}
                               className={
                                 "border border-red-500 text-red-600 hover:bg-red-50 py-1 px-3 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out mx-1 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-900/20 " +
-                                (request.status !== "pending"
-                                  ? " cursor-not-allowed"
+                                (request.status !== "pending" || processing
+                                  ? " cursor-not-allowed opacity-50"
                                   : "")
                               }
                             >

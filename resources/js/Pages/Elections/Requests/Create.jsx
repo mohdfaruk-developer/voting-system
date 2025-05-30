@@ -12,7 +12,7 @@ export default function Create({ auth, candidate }) {
   const candidateData = candidate ? candidate.data : null;
   const electionId = window.location.href.split("/").slice(-3)[0];
 
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, processing } = useForm({
     candidate_id: candidateData ? candidateData.id : "",
     request_type: candidateData ? "exist_candidate" : "new_candidate",
     name: candidateData ? candidateData.name : auth.user.name,
@@ -278,12 +278,17 @@ export default function Create({ auth, candidate }) {
                 <div></div>
                 <div className="mt-4 text-right">
                   <Link
+                    onClick={(event) => {
+                      if (processing) {
+                        event.preventDefault();
+                      }
+                    }}
                     href={route("elections.show", electionId)}
                     className="mx-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 dark:focus:ring-offset-gray-800"
                   >
                     Cancel
                   </Link>
-                  <PrimaryButton>Submit</PrimaryButton>
+                  <PrimaryButton disabled={processing}>Submit</PrimaryButton>
                 </div>
               </div>
             </form>

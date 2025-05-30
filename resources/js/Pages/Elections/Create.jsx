@@ -8,7 +8,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function Create() {
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, processing } = useForm({
     name: "",
     description: "",
     level: "",
@@ -245,12 +245,17 @@ export default function Create() {
 
               <div className="mt-6 text-right">
                 <Link
+                  onClick={(event) => {
+                    if (processing) {
+                      event.preventDefault();
+                    }
+                  }}
                   href={route("elections.index")}
                   className="mx-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 dark:focus:ring-offset-gray-800"
                 >
                   Cancel
                 </Link>
-                <PrimaryButton>Submit</PrimaryButton>
+                <PrimaryButton disabled={processing}>Submit</PrimaryButton>
               </div>
             </form>
           </div>
