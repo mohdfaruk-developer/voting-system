@@ -75,4 +75,38 @@ Make sure the following are installed on your local machine:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/online-voting-system.git
+   git clone https://github.com/mohdfaruk-developer/voting-system.git
+
+2. **Navigate to the project directory**
+   ```bash
+   cd online-voting-system
+
+3. **Install PHP dependencies**
+   ```bash
+   composer install
+
+4. **Create a copy of the .env file**
+   ```bash
+   cp .env.example .env
+
+5. **Generate application key**
+    ```bash
+    php artisan key:generate
+
+6. **Configure .env with your MySQL database credentials**
+
+7. **Run migrations**
+    ```bash
+    php artisan migrate
+
+8. **Install node dependencies**
+    ```bash
+    npm install
+
+9. **Start the node development server**
+    ```bash
+    npm run dev
+
+8. **Start the PHP development server**
+    ```bash
+    php artisan serve
