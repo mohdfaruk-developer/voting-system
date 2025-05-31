@@ -71,7 +71,7 @@ Make sure the following are installed on your local machine:
 
 ---
 
-### 🔹 Backend Setup (Laravel + MySQL)
+### 🔹 Setup Project
 
 1. **Clone the repository**
    ```bash
