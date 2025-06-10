@@ -41,7 +41,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+final class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -68,6 +68,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function voter(): HasOne
+    {
+        return $this->hasOne(Voter::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -80,10 +85,5 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];
-    }
-
-    public function voter(): HasOne
-    {
-        return $this->hasOne(Voter::class);
     }
 }

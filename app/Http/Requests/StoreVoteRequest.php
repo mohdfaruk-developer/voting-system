@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
-class StoreVoteRequest extends FormRequest
+final class StoreVoteRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -72,9 +72,9 @@ class StoreVoteRequest extends FormRequest
                 return;
             }
 
-            if (strtolower($voter[$election->level]) !== strtolower($election->level_name)) {
-                $validator->errors()->add('vote', 'You are not eligible to vote in this election.' .
-                    ' Your ' . $election->level . ' is ' . $voter[$election->level] . ' but the election is for ' . $election->level_name . '.');
+            if (mb_strtolower($voter[$election->level]) !== mb_strtolower($election->level_name)) {
+                $validator->errors()->add('vote', 'You are not eligible to vote in this election.'.
+                    ' Your '.$election->level.' is '.$voter[$election->level].' but the election is for '.$election->level_name.'.');
 
                 return;
             }

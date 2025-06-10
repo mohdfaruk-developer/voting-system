@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
-class MakeAdmin extends Command
+final class MakeAdmin extends Command
 {
     /**
      * The name and signature of the console command.

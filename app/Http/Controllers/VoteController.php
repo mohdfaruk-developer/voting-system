@@ -11,7 +11,7 @@ use App\Models\Election;
 use App\Models\Vote;
 use Inertia\Inertia;
 
-class VoteController extends Controller
+final class VoteController extends Controller
 {
     /**
      * Show the form for creating a new vote.

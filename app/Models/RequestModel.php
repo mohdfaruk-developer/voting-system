@@ -48,10 +48,8 @@ use Illuminate\Support\Str;
  * @mixin \Eloquent
  */
 #[ObservedBy([RequestObserver::class])]
-class RequestModel extends Model
+final class RequestModel extends Model
 {
-    protected $table = 'requests';
-
     use HasFactory;
 
     /**
@@ -83,6 +81,8 @@ class RequestModel extends Model
 
     public const TYPE_EXIST_CANDIDATE = 'exist_candidate';
 
+    protected $table = 'requests';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -99,22 +99,6 @@ class RequestModel extends Model
     ];
 
     /**
-     * Get user
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get last updated by user
-     */
-    public function lastUpdatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'last_updated_by');
-    }
-
-    /**
      * Prepare the data for voter request.
      */
     public static function getVoterRequestData(Request $request, ?Voter $model = null): array
@@ -126,14 +110,14 @@ class RequestModel extends Model
                     $data['data'][$key] = (bool) $request[$key];
                     $data['old_data'][$key] = true;
                 }
-                if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
+                if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) !== $model->{$key}->format('Y-m-d')) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
                 }
                 if (in_array($key, ['voter_alive', 'date_of_birth'])) {
                     continue;
                 }
-                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
+                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
@@ -164,7 +148,7 @@ class RequestModel extends Model
         }
         if ($request->hasFile('aadhar_image')) {
             // Store the uploaded file and get the path
-            $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/' . Str::random(), 'public');
+            $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/'.Str::random(), 'public');
         }
 
         return $data;
@@ -178,7 +162,7 @@ class RequestModel extends Model
         if ($model) {
             $keys = ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'];
             foreach ($keys as $key) {
-                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
+                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
@@ -211,23 +195,26 @@ class RequestModel extends Model
         }
         if ($request->hasFile('candidate_image')) {
             // Store the uploaded file and get the path
-            $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/' . Str::random(), 'public');
+            $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/'.Str::random(), 'public');
         }
 
         return $data;
     }
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Get user
      */
-    protected function casts(): array
+    public function user(): BelongsTo
     {
-        return [
-            'data' => 'json',
-            'old_data' => 'json',
-        ];
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get last updated by user
+     */
+    public function lastUpdatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'last_updated_by');
     }
 
     /**
@@ -245,5 +232,18 @@ class RequestModel extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'data' => 'json',
+            'old_data' => 'json',
+        ];
     }
 }

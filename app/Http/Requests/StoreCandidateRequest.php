@@ -7,7 +7,7 @@ namespace App\Http\Requests;
 use App\Models\RequestModel;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCandidateRequest extends FormRequest
+final class StoreCandidateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +20,7 @@ class StoreCandidateRequest extends FormRequest
             'request_type' => [
                 'required',
                 'string',
-                'in:' . implode(',', [RequestModel::TYPE_NEW_CANDIDATE, RequestModel::TYPE_EXIST_CANDIDATE]),
+                'in:'.implode(',', [RequestModel::TYPE_NEW_CANDIDATE, RequestModel::TYPE_EXIST_CANDIDATE]),
             ],
             'name' => [
                 'required',

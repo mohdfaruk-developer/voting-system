@@ -6,9 +6,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\LocationService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
-class LocationController extends Controller
+final class LocationController extends Controller
 {
     protected LocationService $locationService;
 
@@ -34,7 +35,7 @@ class LocationController extends Controller
     {
         try {
             $states = $this->locationService->getStatesByCountry($countryName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => 'Country not found'], 404);
         }
 

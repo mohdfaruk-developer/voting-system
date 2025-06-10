@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin \App\Models\RequestModel
  */
-class RequestResource extends JsonResource
+final class RequestResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

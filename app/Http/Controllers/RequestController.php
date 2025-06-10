@@ -10,12 +10,13 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\VoterResource;
 use App\Models\RequestModel;
 use App\Models\Voter;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
-class RequestController extends Controller
+final class RequestController extends Controller
 {
     /**
      * Display a listing of the request.
@@ -105,7 +106,7 @@ class RequestController extends Controller
     public function show(RequestModel $request)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id == $request->user_id)) {
+        if (! ($user->is_admin || $user->id === $request->user_id)) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }
@@ -144,7 +145,7 @@ class RequestController extends Controller
             DB::rollBack();
 
             return redirect()->route('requests.show', $request)->with('error', Str::before($e->getMessage(), '(Connection:'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
 
             return redirect()->route('requests.show', $request)->with('error', $e->getMessage());
@@ -160,7 +161,7 @@ class RequestController extends Controller
     public function destroy(RequestModel $request)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id == $request->user_id)) {
+        if (! ($user->is_admin || $user->id === $request->user_id)) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }

@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin \App\Models\Election
  */
-class ElectionResource extends JsonResource
+final class ElectionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

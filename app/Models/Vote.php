@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
-class Vote extends Model
+final class Vote extends Model
 {
     use HasFactory;
 

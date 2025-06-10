@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class Country extends Model
+final class Country extends Model
 {
     use HasFactory;
 

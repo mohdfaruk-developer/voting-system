@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-class State extends Model
+final class State extends Model
 {
     use HasFactory;
 

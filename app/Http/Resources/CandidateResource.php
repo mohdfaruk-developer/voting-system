@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin \App\Models\Candidate
  */
-class CandidateResource extends JsonResource
+final class CandidateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

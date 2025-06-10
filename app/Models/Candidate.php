@@ -55,7 +55,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class Candidate extends Model
+final class Candidate extends Model
 {
     use HasFactory;
 

@@ -12,7 +12,7 @@ use App\Models\RequestModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class CandidateRequestController extends Controller
+final class CandidateRequestController extends Controller
 {
     /**
      * Show the form for creating a candidate request.

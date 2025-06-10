@@ -56,7 +56,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class Voter extends Model
+final class Voter extends Model
 {
     use HasFactory;
 
@@ -96,6 +96,11 @@ class Voter extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -107,10 +112,5 @@ class Voter extends Model
             'date_of_birth' => 'datetime',
             'active' => 'boolean',
         ];
-    }
-
-    public function votes(): HasMany
-    {
-        return $this->hasMany(Vote::class);
     }
 }

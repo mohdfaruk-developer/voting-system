@@ -13,7 +13,7 @@ use App\Notifications\RequestRejected;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class RequestObserver
+final class RequestObserver
 {
     /**
      * Handle the RequestModel "updated" event.

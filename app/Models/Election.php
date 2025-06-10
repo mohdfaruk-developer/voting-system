@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class Election extends Model
+final class Election extends Model
 {
     use HasFactory;
 
@@ -87,19 +87,6 @@ class Election extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'start_on' => 'datetime',
-            'end_on' => 'datetime',
-        ];
-    }
-
-    /**
      * Get last updated by user
      */
     public function lastUpdatedBy(): BelongsTo
@@ -121,5 +108,18 @@ class Election extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'start_on' => 'datetime',
+            'end_on' => 'datetime',
+        ];
     }
 }

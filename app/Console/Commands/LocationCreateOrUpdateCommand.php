@@ -6,12 +6,13 @@ namespace App\Console\Commands;
 
 use App\Models\Country;
 use App\Models\State;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class LocationCreateOrUpdateCommand extends Command
+final class LocationCreateOrUpdateCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -57,9 +58,9 @@ class LocationCreateOrUpdateCommand extends Command
             }
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
-            $this->error('Command failed: ' . $e->getMessage());
+            $this->error('Command failed: '.$e->getMessage());
         }
     }
 
@@ -77,11 +78,11 @@ class LocationCreateOrUpdateCommand extends Command
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch countries data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch countries data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
 
             return [];
-        } catch (\Exception $e) {
-            $this->error('Error fetching countries: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('Error fetching countries: '.$e->getMessage());
 
             return [];
         }
@@ -128,11 +129,11 @@ class LocationCreateOrUpdateCommand extends Command
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch states data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch states data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
 
             return [];
-        } catch (\Exception $e) {
-            $this->error('Error fetching states: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('Error fetching states: '.$e->getMessage());
 
             return [];
         }

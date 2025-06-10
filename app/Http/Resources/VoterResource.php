@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin \App\Models\Voter
  */
-class VoterResource extends JsonResource
+final class VoterResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
