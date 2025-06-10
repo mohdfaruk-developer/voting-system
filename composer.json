@@ -1,9 +1,16 @@
 {
-    "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "voting/system",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "This application is written in laravel php framwork for online voting system.",
+    "keywords": [
+        "laravel",
+        "framework",
+        "voting",
+        "system",
+        "online",
+        "election",
+        "vote"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -15,6 +22,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.4",
         "laravel/breeze": "^2.3",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",

@@ -65,8 +65,10 @@ class LocationCreateOrUpdateCommand extends Command
 
     /**
      * Get the countries data from the API.
+     *
+     * @return list<array<string, string>>
      */
-    private function getCountries(): array
+    private function getCountries()
     {
         try {
             $response = Http::get("{$this->baseApiUrl}/countries/iso");
@@ -114,8 +116,10 @@ class LocationCreateOrUpdateCommand extends Command
 
     /**
      * Get the states data from the API.
+     *
+     * @return list<array<string, string|list<array<string, string>>>>
      */
-    private function getStates(): array
+    private function getStates()
     {
         try {
             $response = Http::get("{$this->baseApiUrl}/countries/states");

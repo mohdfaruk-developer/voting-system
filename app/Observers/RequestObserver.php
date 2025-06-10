@@ -44,7 +44,7 @@ class RequestObserver
             } else {
                 // Update the existing voter if the request is of type exist_voter
                 $voter = Voter::findOrFail($requestModel->data['voter_id']);
-                if ($voter->state === Voter::STATUS_INACTIVE) {
+                if (! $voter->active) {
                     throw new BadRequestHttpException('Voter is inactive');
                 }
                 // Update the voter's details

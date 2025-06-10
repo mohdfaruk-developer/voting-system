@@ -13,6 +13,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+/**
+ * Class RequestModel
+ *
+ * Represents a request made by a user for voter or candidate registration.
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $type
+ * @property array $data
+ * @property array $old_data
+ * @property string $status
+ * @property string|null $comment
+ * @property int|null $last_updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User $user
+ * @property-read User|null $lastUpdatedBy
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereLastUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereOldData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 #[ObservedBy([RequestObserver::class])]
 class RequestModel extends Model
 {
