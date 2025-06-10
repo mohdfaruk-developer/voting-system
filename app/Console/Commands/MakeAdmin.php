@@ -26,7 +26,7 @@ final class MakeAdmin extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $email = $this->option('email');
         $password = $this->option('password');

@@ -29,9 +29,11 @@ final class VoterController extends Controller
                 '%'.$request->search.'%'
             );
         }
+
         if ($request->has('active')) {
             $query->where('active', $request['active']);
         }
+
         $voters = $query->latest()->paginate(15)->onEachSide(1);
 
         return inertia('Voters/Index', [
@@ -48,7 +50,7 @@ final class VoterController extends Controller
     public function show(Voter $voter)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id === $voter->user_id)) {
+        if (! $user->is_admin && $user->id !== $voter->user_id) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }

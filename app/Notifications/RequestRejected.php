@@ -15,17 +15,14 @@ final class RequestRejected extends Notification implements ShouldQueue
     use Queueable;
 
     /**
-     * The request model instance.
-     */
-    protected RequestModel $requestModel;
-
-    /**
      * Create a new notification instance.
      */
-    public function __construct(RequestModel $requestModel)
-    {
-        $this->requestModel = $requestModel;
-    }
+    public function __construct(
+        /**
+         * The request model instance.
+         */
+        private RequestModel $requestModel
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -48,7 +45,7 @@ final class RequestRejected extends Notification implements ShouldQueue
         return (new MailMessage())
             ->subject('Request Rejected')
             ->greeting('Hello!')
-            ->line("Your {$requestTypeLabel} request has been rejected.")
+            ->line(sprintf('Your %s request has been rejected.', $requestTypeLabel))
             ->action('View Request', $url)
             ->line('Thank you for using our application!');
     }

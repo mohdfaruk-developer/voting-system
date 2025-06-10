@@ -32,11 +32,12 @@ final class StoreVoteRequest extends FormRequest
     /**
      * Configure the validator instance.
      */
-    public function withValidator(Validator $validator)
+    public function withValidator(Validator $validator): void
     {
         if ($validator->errors()->count()) {
             return; // Skip if there are already errors
         }
+
         $validator->after(function ($validator): void {
             // Only check for duplicate products when creating, not updating
             $voter = Voter::where('user_id', $this->user()->id)
@@ -63,16 +64,18 @@ final class StoreVoteRequest extends FormRequest
 
                 return;
             }
+
             if ($election->end_on->lessThan(now())) {
                 $validator->errors()->add('vote', 'Voting has ended.');
 
                 return;
             }
+
             if ($election->level === Election::LEVEL_OTHER) {
                 return;
             }
 
-            if (mb_strtolower($voter[$election->level]) !== mb_strtolower($election->level_name)) {
+            if (mb_strtolower((string) $voter[$election->level]) !== mb_strtolower((string) $election->level_name)) {
                 $validator->errors()->add('vote', 'You are not eligible to vote in this election.'.
                     ' Your '.$election->level.' is '.$voter[$election->level].' but the election is for '.$election->level_name.'.');
 

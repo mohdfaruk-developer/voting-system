@@ -103,25 +103,29 @@ final class RequestModel extends Model
      */
     public static function getVoterRequestData(Request $request, ?Voter $model = null): array
     {
-        if ($model) {
+        if ($model instanceof Voter) {
             $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion', 'voter_alive'];
             foreach ($keys as $key) {
                 if ($key === 'voter_alive' && ! $request[$key]) {
                     $data['data'][$key] = (bool) $request[$key];
                     $data['old_data'][$key] = true;
                 }
-                if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) !== $model->{$key}->format('Y-m-d')) {
+
+                if ($key === 'date_of_birth' && date('Y-m-d', strtotime((string) $request[$key])) !== $model->{$key}->format('Y-m-d')) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
                 }
+
                 if (in_array($key, ['voter_alive', 'date_of_birth'])) {
                     continue;
                 }
+
                 if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
             }
+
             $data['data']['voter_id'] = $model->id;
             $data += [
                 'user_id' => $request->user()->id,
@@ -146,6 +150,7 @@ final class RequestModel extends Model
                 'status' => self::STATUS_PENDING,
             ];
         }
+
         if ($request->hasFile('aadhar_image')) {
             // Store the uploaded file and get the path
             $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/'.Str::random(), 'public');
@@ -159,7 +164,7 @@ final class RequestModel extends Model
      */
     public static function getCandidateRequestData(Request $request, ?Candidate $model = null): array
     {
-        if ($model) {
+        if ($model instanceof Candidate) {
             $keys = ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'];
             foreach ($keys as $key) {
                 if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
@@ -167,6 +172,7 @@ final class RequestModel extends Model
                     $data['old_data'][$key] = $model->{$key};
                 }
             }
+
             $data['data']['election_id'] = $model->election_id;
             $data['data']['candidate_id'] = $model->id;
             $data += [
@@ -193,6 +199,7 @@ final class RequestModel extends Model
                 'status' => self::STATUS_PENDING,
             ];
         }
+
         if ($request->hasFile('candidate_image')) {
             // Store the uploaded file and get the path
             $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/'.Str::random(), 'public');
@@ -226,6 +233,7 @@ final class RequestModel extends Model
             // Delete the request
             return parent::delete();
         }
+
         if (isset($this->data['candidate_image']) && Storage::disk('public')->deleteDirectory(dirname($this->data['candidate_image']))) {
             // Delete the request
             return parent::delete();

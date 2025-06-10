@@ -26,6 +26,7 @@ final class CandidateRequestController extends Controller
             // Check if the user is an admin
             abort(403, 'Unauthorized action.');
         }
+
         if ($candidate && $candidate->user_id !== $user->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');
@@ -60,6 +61,7 @@ final class CandidateRequestController extends Controller
             // Check if the user is an admin
             abort(403, 'Unauthorized action.');
         }
+
         if ($candidate && $candidate->user_id !== $user->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');

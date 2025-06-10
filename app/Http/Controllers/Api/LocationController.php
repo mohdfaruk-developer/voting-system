@@ -11,12 +11,7 @@ use Illuminate\Http\JsonResponse;
 
 final class LocationController extends Controller
 {
-    protected LocationService $locationService;
-
-    public function __construct(LocationService $locationService)
-    {
-        $this->locationService = $locationService;
-    }
+    public function __construct(private readonly LocationService $locationService) {}
 
     /**
      * Get all countries
@@ -35,7 +30,7 @@ final class LocationController extends Controller
     {
         try {
             $states = $this->locationService->getStatesByCountry($countryName);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return response()->json(['error' => 'Country not found'], 404);
         }
 

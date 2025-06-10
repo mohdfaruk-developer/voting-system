@@ -45,7 +45,7 @@ final class RequestModelFactory extends Factory
 
     public function existTypeRequest(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'type' => fake()->randomElement([
                 RequestModel::TYPE_EXIST_VOTER,
                 RequestModel::TYPE_EXIST_CANDIDATE,
@@ -65,7 +65,7 @@ final class RequestModelFactory extends Factory
 
     public function approved(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => RequestModel::STATUS_APPROVED,
             'last_updated_by' => User::where('is_admin', true)->get()->random()->id,
         ]);
@@ -73,7 +73,7 @@ final class RequestModelFactory extends Factory
 
     public function rejected(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => RequestModel::STATUS_REJECTED,
             'comment' => fake()->sentence(),
             'last_updated_by' => User::where('is_admin', true)->get()->random()->id,

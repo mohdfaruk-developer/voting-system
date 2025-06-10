@@ -36,6 +36,7 @@ final class RequestObserver
                 if (Voter::where(['user_id' => $requestModel->user_id, 'active' => true])->exists()) {
                     throw new BadRequestHttpException('User already has a voter');
                 }
+
                 // Create a new voter if the request is of type new_voter
                 $voter = Voter::create(array_merge([
                     'user_id' => $requestModel->user_id,
@@ -47,11 +48,13 @@ final class RequestObserver
                 if (! $voter->active) {
                     throw new BadRequestHttpException('Voter is inactive');
                 }
+
                 // Update the voter's details
                 $data = $requestModel->data;
                 if (isset($data['voter_alive']) && ! $data['voter_alive']) {
                     $data = ['active' => false];
                 }
+
                 unset($data['voter_id'], $data['voter_alive']);
                 $voter->update($data);
             }
@@ -63,15 +66,19 @@ final class RequestObserver
             if (! $election) {
                 throw new BadRequestHttpException('Election not found');
             }
+
             if ($election->end_on->isPast()) {
                 throw new BadRequestHttpException('Election has already ended');
             }
+
             if ($election->start_on->isPast()) {
                 throw new BadRequestHttpException('Election is ongoing');
             }
+
             if ($election->candidates()->where('user_id', $requestModel->user_id)->exists()) {
                 throw new BadRequestHttpException('User already has a candidate');
             }
+
             if ($requestModel->type === RequestModel::TYPE_NEW_CANDIDATE) {
                 // Create a new Candidate if request is of type new_candidate
                 $candidate = Candidate::create(array_merge([
@@ -86,6 +93,7 @@ final class RequestObserver
                 unset($data['candidate_id']);
                 $candidate->update($data);
             }
+
             // Send notification to the user
             Notification::send($requestModel->user, new RequestApproved($requestModel));
         }

@@ -17,7 +17,7 @@ final class UserResource extends JsonResource
      *
      * @var string|null
      */
-    public static $wrap = null;
+    public static $wrap;
 
     /**
      * Transform the resource into an array.

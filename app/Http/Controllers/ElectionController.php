@@ -29,6 +29,7 @@ final class ElectionController extends Controller
                 '%'.$request->search.'%'
             );
         }
+
         $elections = $query->latest()->paginate(15)->onEachSide(1);
 
         return Inertia::render('Elections/Index', [
@@ -85,6 +86,7 @@ final class ElectionController extends Controller
             $query->withCount('votes');
             $election->loadCount('votes');
         }
+
         // dd($election, $query->get());
         $candidates = $query->oldest()->paginate(15)->onEachSide(1);
 
