@@ -79,13 +79,12 @@ jobs:
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Create Database
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: |
           mkdir -p database
           touch database/database.sqlite
-      - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite    
 
       - name: Tests
         run: composer test
