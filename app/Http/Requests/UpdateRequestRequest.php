@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequestRequest extends FormRequest
+final class UpdateRequestRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,10 +19,10 @@ class UpdateRequestRequest extends FormRequest
             'status' => [
                 'required',
                 'string',
-                'in:' . implode(',', \App\Models\RequestModel::STATUSES),
+                'in:'.implode(',', \App\Models\RequestModel::STATUSES),
             ],
             'comment' => [
-                'required_if:status,' . \App\Models\RequestModel::STATUS_REJECTED,
+                'required_if:status,'.\App\Models\RequestModel::STATUS_REJECTED,
                 'string',
             ],
         ];

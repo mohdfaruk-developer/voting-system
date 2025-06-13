@@ -11,7 +11,7 @@ use App\Models\Voter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+final class DashboardController extends Controller
 {
     /**
      * Handle the incoming request.

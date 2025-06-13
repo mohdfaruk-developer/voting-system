@@ -13,7 +13,7 @@ use App\Models\Election;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ElectionController extends Controller
+final class ElectionController extends Controller
 {
     /**
      * Display a listing of the election.
@@ -26,9 +26,10 @@ class ElectionController extends Controller
             $query->whereAny(
                 ['name', 'description'],
                 'like',
-                '%' . $request->search . '%'
+                '%'.$request->search.'%'
             );
         }
+
         $elections = $query->latest()->paginate(15)->onEachSide(1);
 
         return Inertia::render('Elections/Index', [
@@ -85,6 +86,7 @@ class ElectionController extends Controller
             $query->withCount('votes');
             $election->loadCount('votes');
         }
+
         // dd($election, $query->get());
         $candidates = $query->oldest()->paginate(15)->onEachSide(1);
 

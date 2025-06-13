@@ -8,7 +8,7 @@ use App\Http\Resources\VoterResource;
 use App\Models\Voter;
 use Illuminate\Http\Request;
 
-class VoterController extends Controller
+final class VoterController extends Controller
 {
     /**
      * Display a listing of the voter.
@@ -26,12 +26,14 @@ class VoterController extends Controller
             $query->whereAny(
                 ['voter_number', 'name', 'aadhar_number', 'address', 'city', 'state', 'country', 'religion', 'pin_code'],
                 'like',
-                '%' . $request->search . '%'
+                '%'.$request->search.'%'
             );
         }
+
         if ($request->has('active')) {
             $query->where('active', $request['active']);
         }
+
         $voters = $query->latest()->paginate(15)->onEachSide(1);
 
         return inertia('Voters/Index', [
@@ -48,7 +50,7 @@ class VoterController extends Controller
     public function show(Voter $voter)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id == $voter->user_id)) {
+        if (! $user->is_admin && $user->id !== $voter->user_id) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }

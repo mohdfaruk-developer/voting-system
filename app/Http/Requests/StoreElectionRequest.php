@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreElectionRequest extends FormRequest
+final class StoreElectionRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -30,7 +30,7 @@ class StoreElectionRequest extends FormRequest
             'level' => [
                 'required',
                 'string',
-                'in:' . implode(',', \App\Models\Election::LEVELS),
+                'in:'.implode(',', \App\Models\Election::LEVELS),
             ],
             'level_name' => [
                 'required',

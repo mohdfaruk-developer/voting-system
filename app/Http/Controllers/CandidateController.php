@@ -9,7 +9,7 @@ use App\Models\Candidate;
 use App\Models\Election;
 use Inertia\Inertia;
 
-class CandidateController extends Controller
+final class CandidateController extends Controller
 {
     /**
      * Display the specified candidate.

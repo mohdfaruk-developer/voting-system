@@ -6,12 +6,13 @@ namespace App\Console\Commands;
 
 use App\Models\Country;
 use App\Models\State;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class LocationCreateOrUpdateCommand extends Command
+final class LocationCreateOrUpdateCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -29,10 +30,8 @@ class LocationCreateOrUpdateCommand extends Command
 
     /**
      * Base API URL for the countries and states data.
-     *
-     * @var string
      */
-    protected $baseApiUrl = 'https://countriesnow.space/api/v0.1';
+    private string $baseApiUrl = 'https://countriesnow.space/api/v0.1';
 
     /**
      * Execute the console command.
@@ -57,29 +56,31 @@ class LocationCreateOrUpdateCommand extends Command
             }
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             DB::rollBack();
-            $this->error('Command failed: ' . $e->getMessage());
+            $this->error('Command failed: '.$exception->getMessage());
         }
     }
 
     /**
      * Get the countries data from the API.
+     *
+     * @return list<array<string, string>>
      */
-    private function getCountries(): array
+    private function getCountries()
     {
         try {
-            $response = Http::get("{$this->baseApiUrl}/countries/iso");
+            $response = Http::get($this->baseApiUrl.'/countries/iso');
 
             if ($response->successful()) {
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch countries data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch countries data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
 
             return [];
-        } catch (\Exception $e) {
-            $this->error('Error fetching countries: ' . $e->getMessage());
+        } catch (Exception $exception) {
+            $this->error('Error fetching countries: '.$exception->getMessage());
 
             return [];
         }
@@ -92,13 +93,11 @@ class LocationCreateOrUpdateCommand extends Command
     {
         $this->info('Creating or updating country data...');
 
-        $countryData = array_map(function ($country) {
-            return [
-                'name' => Str::lower($country['name']),
-                'iso2' => $country['Iso2'],
-                'iso3' => $country['Iso3'],
-            ];
-        }, $countries);
+        $countryData = array_map(fn (array $country): array => [
+            'name' => Str::lower($country['name']),
+            'iso2' => $country['Iso2'],
+            'iso3' => $country['Iso3'],
+        ], $countries);
 
         Country::upsert(
             $countryData,
@@ -114,21 +113,23 @@ class LocationCreateOrUpdateCommand extends Command
 
     /**
      * Get the states data from the API.
+     *
+     * @return list<array<string, string|list<array<string, string>>>>
      */
-    private function getStates(): array
+    private function getStates()
     {
         try {
-            $response = Http::get("{$this->baseApiUrl}/countries/states");
+            $response = Http::get($this->baseApiUrl.'/countries/states');
 
             if ($response->successful()) {
                 return $response->json('data');
             }
 
-            $this->error('Failed to fetch states data from API and the error is: ' . ($response->json('msg') ?? 'unknown error'));
+            $this->error('Failed to fetch states data from API and the error is: '.($response->json('msg') ?? 'unknown error'));
 
             return [];
-        } catch (\Exception $e) {
-            $this->error('Error fetching states: ' . $e->getMessage());
+        } catch (Exception $exception) {
+            $this->error('Error fetching states: '.$exception->getMessage());
 
             return [];
         }
@@ -152,13 +153,11 @@ class LocationCreateOrUpdateCommand extends Command
                 continue;
             }
 
-            $stateData = array_map(function ($state) use ($countries, $countryIsoCode) {
-                return [
-                    'name' => Str::lower($state['name']),
-                    'code' => $state['state_code'],
-                    'country_id' => $countries[$countryIsoCode],
-                ];
-            }, $stateData);
+            $stateData = array_map(fn (array $state): array => [
+                'name' => Str::lower($state['name']),
+                'code' => $state['state_code'],
+                'country_id' => $countries[$countryIsoCode],
+            ], $stateData);
 
             State::upsert(
                 $stateData,

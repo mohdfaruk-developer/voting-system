@@ -13,11 +13,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+/**
+ * Class RequestModel
+ *
+ * Represents a request made by a user for voter or candidate registration.
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $type
+ * @property array $data
+ * @property array $old_data
+ * @property string $status
+ * @property string|null $comment
+ * @property int|null $last_updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User $user
+ * @property-read User|null $lastUpdatedBy
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereLastUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereOldData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RequestModel whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 #[ObservedBy([RequestObserver::class])]
-class RequestModel extends Model
+final class RequestModel extends Model
 {
-    protected $table = 'requests';
-
     use HasFactory;
 
     /**
@@ -49,6 +81,8 @@ class RequestModel extends Model
 
     public const TYPE_EXIST_CANDIDATE = 'exist_candidate';
 
+    protected $table = 'requests';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -65,45 +99,33 @@ class RequestModel extends Model
     ];
 
     /**
-     * Get user
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get last updated by user
-     */
-    public function lastUpdatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'last_updated_by');
-    }
-
-    /**
      * Prepare the data for voter request.
      */
     public static function getVoterRequestData(Request $request, ?Voter $model = null): array
     {
-        if ($model) {
+        if ($model instanceof Voter) {
             $keys = ['name', 'date_of_birth', 'aadhar_number', 'address', 'city', 'state', 'country', 'pin_code', 'religion', 'voter_alive'];
             foreach ($keys as $key) {
                 if ($key === 'voter_alive' && ! $request[$key]) {
                     $data['data'][$key] = (bool) $request[$key];
                     $data['old_data'][$key] = true;
                 }
-                if ($key === 'date_of_birth' && date('Y-m-d', strtotime($request[$key])) != $model->{$key}->format('Y-m-d')) {
+
+                if ($key === 'date_of_birth' && date('Y-m-d', strtotime((string) $request[$key])) !== $model->{$key}->format('Y-m-d')) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key}->format('Y-m-d');
                 }
+
                 if (in_array($key, ['voter_alive', 'date_of_birth'])) {
                     continue;
                 }
-                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
+
+                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
             }
+
             $data['data']['voter_id'] = $model->id;
             $data += [
                 'user_id' => $request->user()->id,
@@ -128,9 +150,10 @@ class RequestModel extends Model
                 'status' => self::STATUS_PENDING,
             ];
         }
+
         if ($request->hasFile('aadhar_image')) {
             // Store the uploaded file and get the path
-            $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/' . Str::random(), 'public');
+            $data['data']['aadhar_image_path'] = $request->file('aadhar_image')->store('aadhar_images/'.Str::random(), 'public');
         }
 
         return $data;
@@ -141,14 +164,15 @@ class RequestModel extends Model
      */
     public static function getCandidateRequestData(Request $request, ?Candidate $model = null): array
     {
-        if ($model) {
+        if ($model instanceof Candidate) {
             $keys = ['name', 'description', 'qualification', 'property', 'address', 'city', 'state', 'country', 'pin_code'];
             foreach ($keys as $key) {
-                if (isset($request[$key]) && $request[$key] != $model->{$key}) {
+                if (isset($request[$key]) && $request[$key] !== $model->{$key}) {
                     $data['data'][$key] = $request[$key];
                     $data['old_data'][$key] = $model->{$key};
                 }
             }
+
             $data['data']['election_id'] = $model->election_id;
             $data['data']['candidate_id'] = $model->id;
             $data += [
@@ -175,12 +199,47 @@ class RequestModel extends Model
                 'status' => self::STATUS_PENDING,
             ];
         }
+
         if ($request->hasFile('candidate_image')) {
             // Store the uploaded file and get the path
-            $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/' . Str::random(), 'public');
+            $data['data']['candidate_image'] = $request->file('candidate_image')->store('candidate_images/'.Str::random(), 'public');
         }
 
         return $data;
+    }
+
+    /**
+     * Get user
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get last updated by user
+     */
+    public function lastUpdatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'last_updated_by');
+    }
+
+    /**
+     * Delete the request.
+     */
+    public function delete(): bool
+    {
+        if (isset($this->data['aadhar_image_path']) && Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
+            // Delete the request
+            return parent::delete();
+        }
+
+        if (isset($this->data['candidate_image']) && Storage::disk('public')->deleteDirectory(dirname($this->data['candidate_image']))) {
+            // Delete the request
+            return parent::delete();
+        }
+
+        return false;
     }
 
     /**
@@ -194,22 +253,5 @@ class RequestModel extends Model
             'data' => 'json',
             'old_data' => 'json',
         ];
-    }
-
-    /**
-     * Delete the request.
-     */
-    public function delete(): bool
-    {
-        if (isset($this->data['aadhar_image_path']) && Storage::disk('public')->deleteDirectory(dirname($this->data['aadhar_image_path']))) {
-            // Delete the request
-            return parent::delete();
-        }
-        if (isset($this->data['candidate_image']) && Storage::disk('public')->deleteDirectory(dirname($this->data['candidate_image']))) {
-            // Delete the request
-            return parent::delete();
-        }
-
-        return false;
     }
 }

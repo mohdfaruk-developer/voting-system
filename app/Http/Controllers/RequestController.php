@@ -10,12 +10,13 @@ use App\Http\Resources\RequestResource;
 use App\Http\Resources\VoterResource;
 use App\Models\RequestModel;
 use App\Models\Voter;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
-class RequestController extends Controller
+final class RequestController extends Controller
 {
     /**
      * Display a listing of the request.
@@ -30,6 +31,7 @@ class RequestController extends Controller
         if ($formRequest->has('type')) {
             $query->where('type', $formRequest->type);
         }
+
         if ($formRequest->has('status')) {
             $query->where('status', $formRequest->status);
         }
@@ -78,10 +80,12 @@ class RequestController extends Controller
         if ($voter && $formRequest->request_type === RequestModel::TYPE_EXIST_VOTER && ! $voter->active) {
             return redirect()->route('requests.index')->with('error', "Can't create update-voter-request because voter is inactivated.");
         }
+
         if ($voter && $voter->user_id !== $formRequest->user()->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');
         }
+
         // Validate and store the request data
         $validatedData = RequestModel::getVoterRequestData($formRequest, $voter);
 
@@ -105,7 +109,7 @@ class RequestController extends Controller
     public function show(RequestModel $request)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id == $request->user_id)) {
+        if (! $user->is_admin && $user->id !== $request->user_id) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }
@@ -130,10 +134,12 @@ class RequestController extends Controller
             // Check if the user is authorized to update the request
             abort(403, 'Unauthorized action.');
         }
+
         // Check if the request is already approved or rejected
         if ($request->status !== RequestModel::STATUS_PENDING) {
             return redirect()->route('requests.show', $request)->with('error', 'Already request is approved or rejected.');
         }
+
         try {
             DB::beginTransaction();
             // Update the request with the validated data
@@ -144,7 +150,7 @@ class RequestController extends Controller
             DB::rollBack();
 
             return redirect()->route('requests.show', $request)->with('error', Str::before($e->getMessage(), '(Connection:'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
 
             return redirect()->route('requests.show', $request)->with('error', $e->getMessage());
@@ -160,14 +166,16 @@ class RequestController extends Controller
     public function destroy(RequestModel $request)
     {
         $user = request()->user();
-        if (! ($user->is_admin || $user->id == $request->user_id)) {
+        if (! $user->is_admin && $user->id !== $request->user_id) {
             // Check if the user is authorized to delete the request
             abort(403, 'Unauthorized action.');
         }
+
         // Check if the request is already approved or rejected
         if ($request->status !== RequestModel::STATUS_PENDING) {
             return redirect()->route('requests.show', $request)->with('error', 'Cannot delete an approved or rejected request.');
         }
+
         // Delete the specified request
         $request->delete();
 

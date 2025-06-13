@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateElectionRequest extends FormRequest
+final class UpdateElectionRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +20,7 @@ class UpdateElectionRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:elections,name,' . $this->election->id,
+                'unique:elections,name,'.$this->election->id,
             ],
             'description' => [
                 'required',
@@ -30,7 +30,7 @@ class UpdateElectionRequest extends FormRequest
             'level' => [
                 'required',
                 'string',
-                'in:' . implode(',', \App\Models\Election::LEVELS),
+                'in:'.implode(',', \App\Models\Election::LEVELS),
             ],
             'level_name' => [
                 'required',

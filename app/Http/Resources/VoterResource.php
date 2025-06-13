@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class VoterResource extends JsonResource
+/**
+ * @mixin \App\Models\Voter
+ */
+final class VoterResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

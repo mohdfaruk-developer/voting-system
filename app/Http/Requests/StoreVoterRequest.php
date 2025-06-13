@@ -7,7 +7,7 @@ namespace App\Http\Requests;
 use App\Models\RequestModel;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreVoterRequest extends FormRequest
+final class StoreVoterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +20,7 @@ class StoreVoterRequest extends FormRequest
             'request_type' => [
                 'required',
                 'string',
-                'in:' . implode(',', [RequestModel::TYPE_NEW_VOTER, RequestModel::TYPE_EXIST_VOTER]),
+                'in:'.implode(',', [RequestModel::TYPE_NEW_VOTER, RequestModel::TYPE_EXIST_VOTER]),
             ],
             'name' => [
                 'required',
@@ -30,7 +30,7 @@ class StoreVoterRequest extends FormRequest
             'date_of_birth' => [
                 'required',
                 'date_format:Y-m-d',
-                'before:' . now()->subYears(18)->format('Y-m-d'),
+                'before:'.now()->subYears(18)->format('Y-m-d'),
             ],
             'aadhar_number' => [
                 'required',

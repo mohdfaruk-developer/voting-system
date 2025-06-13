@@ -1,9 +1,16 @@
 {
-    "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "voting/system",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "This application is written in laravel php framwork for online voting system.",
+    "keywords": [
+        "laravel",
+        "framework",
+        "voting",
+        "system",
+        "online",
+        "election",
+        "vote"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -15,14 +22,15 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "laravel/breeze": "^2.3",
+        "larastan/larastan": "^3.0",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
-        "pestphp/pest": "^2.34",
-        "pestphp/pest-plugin-laravel": "^2.2"
+        "pestphp/pest": "^3.7",
+        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "rector/rector": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -58,6 +66,20 @@
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+        ],
+        "rector": "rector",
+        "lint": "pint",
+        "test:rector": "rector --dry-run",
+        "test:lint": "pint --test",
+        "test:types": "phpstan analyse",
+        "test:unit": "pest --colors=always --parallel --coverage --min=90",
+        "test:type-coverage": "pest --type-coverage --min=90",
+        "test": [
+            "@test:type-coverage",
+            "@test:rector",
+            "@test:lint",
+            "@test:types",
+            "@test:unit"
         ]
     },
     "extra": {
