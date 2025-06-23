@@ -11,15 +11,13 @@ use App\Http\Controllers\VoterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
+Route::get('/', fn () => Inertia::render('Welcome', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register'),
+]));
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('/dashboard', App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,10 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('elections/{election}/candidates', CandidateController::class)->only(['show', 'destroy']);
 
     // Vote routes
-    Route::get('elections/{election}/votes', [\App\Http\Controllers\VoteController::class, 'create'])
+    Route::get('elections/{election}/votes', [App\Http\Controllers\VoteController::class, 'create'])
         ->middleware('password.confirm')->name('votes.create');
-    Route::post('elections/{election}/votes', [\App\Http\Controllers\VoteController::class, 'store'])
+    Route::post('elections/{election}/votes', [App\Http\Controllers\VoteController::class, 'store'])
         ->name('votes.store');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

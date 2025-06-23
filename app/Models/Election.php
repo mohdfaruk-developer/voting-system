@@ -9,7 +9,44 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Election extends Model
+/**
+ * Class Election
+ *
+ * Represents an election with various attributes and relationships.
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property string $level
+ * @property string $level_name
+ * @property \Illuminate\Support\Carbon $start_on
+ * @property \Illuminate\Support\Carbon $end_on
+ * @property int|null $last_updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User|null $lastUpdatedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Candidate> $candidates
+ * @property-read int|null $candidates_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Vote> $votes
+ * @property-read int|null $votes_count
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Election newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Election newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Election query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereEndOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereLastUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereLevelName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereStartOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Election whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
+final class Election extends Model
 {
     use HasFactory;
 
@@ -50,19 +87,6 @@ class Election extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'start_on' => 'datetime',
-            'end_on' => 'datetime',
-        ];
-    }
-
-    /**
      * Get last updated by user
      */
     public function lastUpdatedBy(): BelongsTo
@@ -84,5 +108,18 @@ class Election extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'start_on' => 'datetime',
+            'end_on' => 'datetime',
+        ];
     }
 }

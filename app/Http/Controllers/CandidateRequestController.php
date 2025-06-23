@@ -12,7 +12,7 @@ use App\Models\RequestModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class CandidateRequestController extends Controller
+final class CandidateRequestController extends Controller
 {
     /**
      * Show the form for creating a candidate request.
@@ -26,6 +26,7 @@ class CandidateRequestController extends Controller
             // Check if the user is an admin
             abort(403, 'Unauthorized action.');
         }
+
         if ($candidate && $candidate->user_id !== $user->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');
@@ -60,6 +61,7 @@ class CandidateRequestController extends Controller
             // Check if the user is an admin
             abort(403, 'Unauthorized action.');
         }
+
         if ($candidate && $candidate->user_id !== $user->id) {
             // Check if the user is authorized to create the request
             abort(403, 'Unauthorized action.');

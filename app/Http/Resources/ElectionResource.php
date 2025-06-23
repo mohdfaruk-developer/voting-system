@@ -7,7 +7,10 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ElectionResource extends JsonResource
+/**
+ * @mixin \App\Models\Election
+ */
+final class ElectionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

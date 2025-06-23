@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Models\Country;
 
-class LocationService
+final class LocationService
 {
     /**
      * Get all countries

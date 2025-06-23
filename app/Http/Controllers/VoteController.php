@@ -8,9 +8,10 @@ use App\Http\Requests\StoreVoteRequest;
 use App\Http\Resources\CandidateResource;
 use App\Http\Resources\ElectionResource;
 use App\Models\Election;
+use App\Models\Vote;
 use Inertia\Inertia;
 
-class VoteController extends Controller
+final class VoteController extends Controller
 {
     /**
      * Show the form for creating a new vote.
@@ -39,7 +40,8 @@ class VoteController extends Controller
     {
         $validated = $request->validated();
 
-        $vote = $request->user()->voter->votes()->create([
+        $vote = Vote::create([
+            'voter_id' => $request->user()->voter->id,
             'election_id' => $election->id,
             'candidate_id' => $validated['candidate_id'],
         ]);

@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class RequestResource extends JsonResource
+/**
+ * @mixin \App\Models\RequestModel
+ */
+final class RequestResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

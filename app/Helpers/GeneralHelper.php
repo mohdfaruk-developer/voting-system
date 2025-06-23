@@ -10,7 +10,7 @@ if (! function_exists('getVoterNumber')) {
      */
     function getVoterNumber()
     {
-        $voterNumber = 'VO' . str_pad((string) rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+        $voterNumber = 'VO'.mb_str_pad((string) random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
         $existingVoter = Voter::where('voter_number', $voterNumber)->first();
 
         if ($existingVoter) {
